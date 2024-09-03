@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Sarathi/static/css/main.f08e707e.css",
+    "main.js": "/Sarathi/static/js/main.bf86d1d9.js",
+    "static/js/453.1f8d912e.chunk.js": "/Sarathi/static/js/453.1f8d912e.chunk.js",
+    "static/media/logo_name.svg": "/Sarathi/static/media/logo_name.d1d37984317bd90de447fa58d7147011.svg",
+    "index.html": "/Sarathi/index.html",
+    "main.f08e707e.css.map": "/Sarathi/static/css/main.f08e707e.css.map",
+    "main.bf86d1d9.js.map": "/Sarathi/static/js/main.bf86d1d9.js.map",
+    "453.1f8d912e.chunk.js.map": "/Sarathi/static/js/453.1f8d912e.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f08e707e.css",
+    "static/js/main.bf86d1d9.js"
+  ]
+}
