@@ -7,6 +7,7 @@ const MentorCard = ({ mentor }) => {
 			<p className="text-sm text-gray-600">{mentor.title}</p>
 			<p className="mt-2">{mentor.description}</p>
 		</div>
+		
 	);
 };
 
