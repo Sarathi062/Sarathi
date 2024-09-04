@@ -1,28 +1,67 @@
 import React from "react";
+import useSidebarStore from "../utils/useSidebarStore";
 
 const Navbar = () => {
+	const toggleBar = useSidebarStore((state) => state.setSidebarOpen);
+
+	const toggleSidebar = () => {
+		toggleBar();
+	};
+
 	return (
-		<nav className="bg-blue-900 text-white p-4">
-			<div className="container mx-auto flex justify-between items-center">
-				<div className="text-xl font-bold">MentorConnect</div>
-				<ul className="flex space-x-4">
+		<nav className="bg-blue-900 text-white p-4 shadow-lg">
+			<div className="container flex justify-between items-center">
+				{/* Left Section: Brand Title and Sidebar Toggle Icon */}
+				<div className="flex items-center gap-3">
+					{/* Sidebar Toggle Icon */}
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						x="0px"
+						y="0px"
+						width="30"
+						height="30"
+						viewBox="0 0 30 30"
+						className="fill-current cursor-pointer"
+						onClick={toggleSidebar}
+					>
+						<path d="M 3 7 A 1.0001 1.0001 0 1 0 3 9 L 27 9 A 1.0001 1.0001 0 1 0 27 7 L 3 7 z M 3 14 A 1.0001 1.0001 0 1 0 3 16 L 27 16 A 1.0001 1.0001 0 1 0 27 14 L 3 14 z M 3 21 A 1.0001 1.0001 0 1 0 3 23 L 27 23 A 1.0001 1.0001 0 1 0 27 21 L 3 21 z"></path>
+					</svg>
+
+					{/* Brand Name */}
+					<div className="text-2xl font-bold tracking-wide">Sarathi</div>
+				</div>
+
+				{/* Right Section: Navigation Links */}
+				<ul className="flex space-x-6 ml-auto">
 					<li>
-						<a href="/" className="hover:text-blue-300">
+						<a
+							href="/"
+							className="hover:text-blue-300 transition-colors duration-300"
+						>
 							Home
 						</a>
 					</li>
 					<li>
-						<a href="/mentors" className="hover:text-blue-300">
+						<a
+							href="/mentors"
+							className="hover:text-blue-300 transition-colors duration-300"
+						>
 							Find Mentors
 						</a>
 					</li>
 					<li>
-						<a href="/about" className="hover:text-blue-300">
+						<a
+							href="/about"
+							className="hover:text-blue-300 transition-colors duration-300"
+						>
 							About
 						</a>
 					</li>
 					<li>
-						<a href="/login" className="hover:text-blue-300">
+						<a
+							href="/login"
+							className="hover:text-blue-300 transition-colors duration-300"
+						>
 							Login
 						</a>
 					</li>
