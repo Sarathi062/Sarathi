@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import useSidebarStore from "../utils/useSidebarStore";
 
 const Navbar = () => {
@@ -34,36 +35,36 @@ const Navbar = () => {
 				{/* Right Section: Navigation Links */}
 				<ul className="flex space-x-6 ml-auto">
 					<li>
-						<a
-							href="/"
+						<Link
+							to="/"
 							className="hover:text-blue-300 transition-colors duration-300"
 						>
 							Home
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
-							href="/mentors"
+						<Link
+							to="/mentors"
 							className="hover:text-blue-300 transition-colors duration-300"
 						>
 							Find Mentors
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
-							href="/about"
+						<Link
+							to="/about"
 							className="hover:text-blue-300 transition-colors duration-300"
 						>
 							About
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a
-							href="/login"
+						<Link
+							to="/login"
 							className="hover:text-blue-300 transition-colors duration-300"
 						>
 							Login
-						</a>
+						</Link>
 					</li>
 				</ul>
 			</div>
