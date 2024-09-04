@@ -1,5 +1,5 @@
 import React from "react";
-import useSidebarStore from "../utils/useSidebarStore";
+import useSidebarStore from "../utils/useSideBarStore";
 
 const Navbar = () => {
 	const toggleBar = useSidebarStore((state) => state.setSidebarOpen);
