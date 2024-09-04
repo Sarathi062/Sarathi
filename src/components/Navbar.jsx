@@ -1,7 +1,6 @@
 import React from "react";
 import useSidebarStore from "../utils/useSideBarStore";
 import { Link } from "react-router-dom";
-import useSidebarStore from "../utils/useSidebarStore";
 
 const Navbar = () => {
 	const toggleBar = useSidebarStore((state) => state.setSidebarOpen);
