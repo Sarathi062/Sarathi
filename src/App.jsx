@@ -26,7 +26,7 @@ function App() {
 			<Navbar />
 			{/* Define your routes inside the Routes component */}
 			<Routes>
-				<Route path="/" element={<Home />} />
+				<Route path="/Sarathi" element={<Home />} />
 				<Route path="/mentors" element={<MentorCardPage />} />
 				<Route path="/about" element={<About />} />
 				<Route path="/login" element={<Login />} />
