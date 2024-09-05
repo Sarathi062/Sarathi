@@ -10,7 +10,7 @@ const Sidebar = () => {
 			<aside
 				className={`${
 					toggleState ? "w-64" : "w-0"
-				} bg-gray-800 text-white h-screen transition-all duration-300 overflow-hidden`}
+				} bg-gray-800 text-white h-full transition-all duration-300 overflow-hidden`}
 			>
 				<div className="p-4">
 					<h2 className="text-xl font-bold mb-8">Menter Connect</h2>

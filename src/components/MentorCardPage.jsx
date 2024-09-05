@@ -25,6 +25,18 @@ const MentorCardPage = () => {
 			description: "Focuses on network security and ethical hacking.",
 		},
 		// Add more mentors as needed
+		{
+			id: 4,
+			name: "Albert Johnson",
+			title: "Cybersecurity Specialist",
+			description: "Focuses on network security and ethical hacking.",
+		},
+		{
+			id: 5,
+			name: "Albert Johnson",
+			title: "Cybersecurity Specialist",
+			description: "Focuses on network security and ethical hacking.",
+		},
 	];
 
 	return (
