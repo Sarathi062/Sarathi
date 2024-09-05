@@ -33,9 +33,11 @@ const MentorCardPage = () => {
 			<Sidebar />
 
 			{/* Main content */}
-			<div className="bg-gray-100 flex-1 p-6">
-				<h1 className="text-2xl font-semibold mb-4">Our Mentors</h1>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+			<div className="bg-gray-100 flex-1 p-8">
+				<h1 className="text-4xl font-semibold text-center text-blue-900 mb-8">
+					Find Your Mentor
+				</h1>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 					{mentors.map((mentor) => (
 						<MentorCard key={mentor.id} mentor={mentor} />
 					))}
