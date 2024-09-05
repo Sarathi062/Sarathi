@@ -17,7 +17,9 @@ const Home = () => {
             enhance your chances of landing your ideal intern.
           </p>
           <div className="button_container">
-            <button>Find Mentor</button>
+            <Link to="/mentors">
+              <button>Find Mentor</button>
+            </Link>
             <button>Be Mentor</button>
           </div>
         </div>
