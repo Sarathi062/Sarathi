@@ -36,7 +36,7 @@ const Navbar = () => {
 				<ul className="flex space-x-6 ml-auto">
 					<li>
 						<Link
-							to="/Sarathi"
+							to="/"
 							className="hover:text-blue-300 transition-colors duration-300"
 						>
 							Home
