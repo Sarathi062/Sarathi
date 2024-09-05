@@ -10,8 +10,8 @@ const Navbar = () => {
 	};
 
 	return (
-		<nav className="bg-blue-900 text-white p-4 shadow-lg">
-			<div className="container flex justify-between items-center">
+		<nav className="bg-blue-900 text-white p-4 shadow-lg w-full">
+			<div className="flex justify-between items-center w-full">
 				{/* Left Section: Brand Title and Sidebar Toggle Icon */}
 				<div className="flex items-center gap-3">
 					{/* Sidebar Toggle Icon */}
