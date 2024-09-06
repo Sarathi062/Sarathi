@@ -18,6 +18,7 @@ import MentorCardPage from "./components/MentorCardPage";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import About from "./components/About";
+import Footer from "./components/Footer";
 
 function App() {
 	return (
@@ -31,6 +32,7 @@ function App() {
 				<Route path="/about" element={<About />} />
 				<Route path="/login" element={<Login />} />
 			</Routes>
+			<Footer />
 		</Router>
 	);
 }
