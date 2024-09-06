@@ -1,6 +1,5 @@
 import React from "react";
 import { FaLinkedin, FaTwitter } from "react-icons/fa"; // Import LinkedIn and Twitter icons
-import { Link } from "react-router-dom";
 
 const MentorCard = ({ mentor }) => {
 	return (
@@ -23,10 +22,6 @@ const MentorCard = ({ mentor }) => {
 				<div className="flex justify-between items-center mb-2">
 					<p className="font-semibold text-gray-800">Experience Level:</p>
 					<p className="text-gray-600">{mentor.experienceLevel}</p>
-				</div>
-				<div className="flex justify-between items-center mb-2">
-					<p className="font-semibold text-gray-800">Location:</p>
-					<p className="text-gray-600">{mentor.location}</p>
 				</div>
 				<div className="flex justify-between items-center mb-2">
 					<p className="font-semibold text-gray-800">Language:</p>

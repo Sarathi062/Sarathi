@@ -1,16 +1,3 @@
-// import React from "react";
-// import Body from "./components/Body";
-
-// function App() {
-// 	return (
-// 		<div>
-// 			<Body />
-// 		</div>
-// 	);
-// }
-
-// export default App;
-
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/Navbar";
@@ -27,7 +14,7 @@ function App() {
 			<Navbar />
 			{/* Define your routes inside the Routes component */}
 			<Routes>
-				<Route path="/Sarathi" element={<Home />} />
+				<Route path="/" element={<Home />} />
 				<Route path="/mentors" element={<MentorCardPage />} />
 				<Route path="/about" element={<About />} />
 				<Route path="/login" element={<Login />} />
