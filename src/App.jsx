@@ -6,7 +6,7 @@ import Home from "./components/Home";
 // import Login from "./components/Login";
 import About from "./components/About";
 import Footer from "./components/Footer";
-
+import Mentors from "./components/Mentors";
 function App() {
 	return (
 		<Router>
@@ -18,6 +18,8 @@ function App() {
 				<Route path="/mentors" element={<MentorCardPage />} />
 				<Route path="/about" element={<About />} />
 				{/* <Route path="/login" element={<Login />} /> */}
+				<Route path="/login" element={<Login />} />
+				<Route path="/Mentors/:id" element={<Mentors />} />
 			</Routes>
 			<Footer />
 		</Router>

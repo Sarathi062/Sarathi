@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+
 import LoginAuth from "./LoginAuth"; // Import the LoginAuth component
 
 const Navbar = () => {
