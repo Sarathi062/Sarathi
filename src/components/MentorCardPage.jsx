@@ -58,7 +58,7 @@ const MentorCardPage = () => {
 	};
 
 	return (
-		<div className="min-h-screen bg-gray-50 relative">
+		<div className="min-h-screen bg-gray-100 relative">
 			<div className="container mx-auto p-4 lg:p-8">
 				<h1 className="text-3xl md:text-4xl font-bold text-center text-blue-900 mb-6 md:mb-8">
 					Find Your Mentor
