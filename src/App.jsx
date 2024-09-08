@@ -18,7 +18,7 @@ function App() {
 				<Route path="/mentors" element={<MentorCardPage />} />
 				<Route path="/about" element={<About />} />
 				{/* <Route path="/login" element={<Login />} /> */}
-				<Route path="/login" element={<Login />} />
+				{/* <Route path="/login" element={<Login />} /> */}
 				<Route path="/Mentors/:id" element={<Mentors />} />
 			</Routes>
 			<Footer />
