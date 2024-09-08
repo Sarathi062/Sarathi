@@ -1,7 +1,7 @@
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+import LoginAuth from "./LoginAuth"; // Import the LoginAuth component
 
 const Navbar = () => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -15,7 +15,7 @@ const Navbar = () => {
 			<div className="flex justify-between items-center w-full">
 				{/* Brand Name */}
 				<Link to="/">
-					<div className="text-2xl font-bold tracking-wide ">SARATHI</div>
+					<div className="text-2xl font-bold tracking-wide">SARATHI</div>
 				</Link>
 
 				{/* Hamburger Menu Icon for Mobile */}
@@ -45,7 +45,7 @@ const Navbar = () => {
 				</button>
 
 				{/* Desktop Navigation Links */}
-				<ul className="hidden md:flex space-x-6 ml-auto">
+				<ul className="hidden md:flex space-x-6 ml-auto items-center">
 					<li>
 						<Link
 							to="/"
@@ -70,27 +70,24 @@ const Navbar = () => {
 							About
 						</Link>
 					</li>
+
+					{/* Use the LoginAuth component here */}
 					<li>
-						<Link
-							to="/login"
-							className="hover:text-gray-300 transition-colors duration-300"
-						>
-							Login
-						</Link>
+						<LoginAuth />
 					</li>
 				</ul>
 			</div>
 
 			{/* Fullscreen Mobile Menu */}
 			{isMobileMenuOpen && (
-				<div className="fixed inset-0 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white flex flex-col items-center justify-center z-50 ">
+				<div className="fixed inset-0 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white flex flex-col items-center justify-center z-50">
 					<button
 						onClick={toggleMobileMenu}
 						className="absolute top-4 right-4 flex items-center gap-2 text-xl font-bold"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
-							className="h-6 w-6 "
+							className="h-6 w-6"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
@@ -113,7 +110,7 @@ const Navbar = () => {
 						</li>
 						<li>
 							<Link to="/mentors" onClick={toggleMobileMenu}>
-								Find mentor
+								Find Mentors
 							</Link>
 						</li>
 						<li>
@@ -121,16 +118,16 @@ const Navbar = () => {
 								About
 							</Link>
 						</li>
+
+						{/* LoginAuth logic simplified */}
 						<li>
-							<Link to="/login" onClick={toggleMobileMenu}>
-								Login
-							</Link>
+							<LoginAuth isMobile={true} onCloseMenu={toggleMobileMenu} />
 						</li>
 					</ul>
 
 					<div className="mt-16 text-center">
 						<p className="font-semibold text-lg">Get in touch</p>
-						<a href="contact@yourwebsite.com" className="text-xl">
+						<a href="mailto:contact@yourwebsite.com" className="text-xl">
 							contact@yourwebsite.com
 						</a>
 					</div>
