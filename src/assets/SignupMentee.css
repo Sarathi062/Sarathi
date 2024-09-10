@@ -1,0 +1,60 @@
+.signup-mentee-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .signup-mentee-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .signup-mentee-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .signup-mentee-form label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .signup-mentee-form input, 
+  .signup-mentee-form select, 
+  .signup-mentee-form textarea {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    width: 100%;
+  }
+  
+  .signup-mentee-form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .signup-mentee-form button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-mentee-form button:hover {
+    background-color: #0056b3;
+  }
+  

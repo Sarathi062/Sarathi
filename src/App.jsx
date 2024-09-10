@@ -7,6 +7,8 @@ import Home from "./components/Home";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import Mentors from "./components/Mentors";
+import Signup from "./components/Signup";
+import SignupMentee from "./components/SignupMentee";
 function App() {
 	return (
 		<Router>
@@ -20,6 +22,8 @@ function App() {
 				{/* <Route path="/login" element={<Login />} /> */}
 				{/* <Route path="/login" element={<Login />} /> */}
 				<Route path="/Mentors/:id" element={<Mentors />} />
+				<Route path="/Signup" element={<Signup />} />
+				<Route path="/SignupMentee" element={<SignupMentee />} />
 			</Routes>
 			<Footer />
 		</Router>

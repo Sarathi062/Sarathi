@@ -51,10 +51,10 @@ const AboutPage = () => {
 						Have questions or feedback? We’d love to hear from you! Reach out to
 						us at
 						<a
-							href="mailto:contact@yourwebsite.com"
+							href="mailto:sarathi062023@gmail.com"
 							className="text-blue-600 hover:underline font-semibold ml-1"
 						>
-							contact@yourwebsite.com
+							sarathi062023@gmail.com
 						</a>
 						.
 					</p>
