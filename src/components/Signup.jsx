@@ -4,7 +4,7 @@ import "./signup.css";
 
 const Signup = () => {
   const [generatedOTP, setGeneratedOTP] = useState(false);
-  const [OTPVerified, setOTPVerified] = useState(true);
+  const [OTPVerified, setOTPVerified] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
