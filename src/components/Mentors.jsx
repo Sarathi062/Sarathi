@@ -31,8 +31,7 @@ const mentorsList = [
         twitter: 'https://twitter.com/janesmith',
       },
     },
-  ];
-  
+];
 
 const Mentors = () => {
   const { id } = useParams(); 
@@ -43,6 +42,46 @@ const Mentors = () => {
   if (!mentor) {
     return <p>Mentor not found</p>;
   }
+
+  // Function to book a session and create a Google Calendar event
+  // const bookSession = async () => {
+  //   try {
+  //     // Check if the user is authenticated
+  //     const authCheck = await fetch('http://localhost:3001/auth-check'); // Add an auth-check route to your server
+  //     if (!authCheck.ok) {
+  //       window.location.href = 'http://localhost:3001/auth'; // Redirect to authenticate if not authenticated
+  //       return;
+  //     }
+  
+  //     // Data for the session event
+  //     const eventData = {
+  //       title: `Session with ${mentor.name}`,
+  //       description: `Book a mentoring session with ${mentor.name} (${mentor.sessionType})`,
+  //       start: '2024-09-18T09:00:00-07:00', // Example start time
+  //       end: '2024-09-18T10:00:00-07:00',   // Example end time
+  //     };
+  
+  //     // Sending a POST request to your server to create a calendar event
+  //     const response = await fetch('http://localhost:3001/add-event', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(eventData),
+  //     });
+  
+  //     const data = await response.json();
+  
+  //     if (response.ok) {
+  //       alert('Session successfully booked and added to Google Calendar!');
+  //     } else {
+  //       alert(`Failed to book session: ${data.message}`);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error booking session:', error);
+  //   }
+  // };
+  
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
@@ -136,7 +175,10 @@ const Mentors = () => {
 
       {/* Call to Action */}
       <div className="mt-6 text-center">
-        <button className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300">
+        <button
+          // onClick={bookSession}
+          className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300"
+        >
           Book a Session
         </button>
       </div>
