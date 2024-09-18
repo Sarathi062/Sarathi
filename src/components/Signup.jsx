@@ -1,10 +1,10 @@
-import  { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signup.css";
 
 const Signup = () => {
   const [generatedOTP, setGeneratedOTP] = useState(false);
-  const [OTPVerified, setOTPVerified] = useState(false);
+  const [OTPVerified, setOTPVerified] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
