@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from './User-Model.js';
+import MenteeUser from './Mentee-Model.js';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
@@ -27,7 +28,31 @@ export const login = async (req, res) => {
         // Create a token
         const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1hr' });
         res.status(200).json({ message: "Login successful", token, user });
-        
+
+    } catch (error) {
+        res.status(500).json({ error: "Error occurred" });
+    }
+};
+export const loginMentee = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await MenteeUser.findOne({ email });
+
+        console.log(user);
+
+        if (!user) {
+            return res.status(400).json({ error: "User not found" });
+        }
+
+        if (user.password !== password) {
+            return res.status(400).json({ error: "Invalid password" });
+        }
+
+        // Create a token
+        const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1hr' });
+        res.status(200).json({ message: "Login successful", token, user });
+
     } catch (error) {
         res.status(500).json({ error: "Error occurred" });
     }
@@ -156,43 +181,68 @@ export const verifyOTP = async (req, res) => {
 };
 
 // Function to handle registration
-export const register = async (req, res) => {
+export const registerMentor = async (req, res) => {
     try {
         const { email,
             password,
             role,
             firstName,
             lastName,
-            // profilePhoto,
             jobTitle,
             company,
             location,
             linkedin,
             skills,
-            educationStatus,
-            interests,
-            goals,
             experience, } = req.body;
         const userExist = await User.findOne({ email });
         if (userExist) {
             return res.status(400).json({ error: "User already exists" });
         }
-        const newUser = await User.create({ email,
+        const newUser = await User.create({
+            email,
             password,
             role,
             firstName,
             lastName,
-            // profilePhoto,
             jobTitle,
             company,
             location,
             linkedin,
             skills,
+            experience,
+        });
+        res.status(200).json({ message: "Mentor Registration successful" });
+    } catch (error) {
+        res.status(500).json({ error: "Error occurred" });
+    }
+};
+export const registerMentee = async (req, res) => {
+    try {
+        const { email,
+            password,
+            role,
+            firstName,
+            lastName,
+            skills,
             educationStatus,
             interests,
-            goals,
-            experience, });
-        res.status(200).json({ message: "Registration successful" });
+            goals } = req.body;
+        const userExist = await MenteeUser.findOne({ email });
+        if (userExist) {
+            return res.status(400).json({ error: "User already exists" });
+        }
+        const newUser = await MenteeUser.create({
+            email,
+            password,
+            role,
+            firstName,
+            lastName,
+            skills,
+            educationStatus,
+            interests,
+            goals
+        });
+        res.status(200).json({ message: "Mentee Registration successful" });
     } catch (error) {
         res.status(500).json({ error: "Error occurred" });
     }
