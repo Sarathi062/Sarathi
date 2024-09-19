@@ -1,15 +1,11 @@
 import mongoose from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const Mentee = new mongoose.Schema({
     email: {
         type: String,
         required: true
     },
     password: {
-        type: String,
-        required: true
-    },
-    role: {
         type: String,
         required: true
     },
@@ -22,33 +18,21 @@ const UserSchema = new mongoose.Schema({
         required: true
     },
     
-    jobTitle: {
+    educationStatus: {
         type: String,
         // required: true
     },
-    company: {
-        type: String,
-        // required: true
-    },
-    location: {
-        type: String,
-        // required: true
-    },
-    linkedin: {
-        type: String,
-        // required: true
-    },
-    skills: {
+    interests: {
         type: Array,
         // required: true
     },
-    experience: {
+    goals: {
         type: Array,
         // required: true
-    }
+    },
 });
 
-const User = mongoose.model('User', UserSchema);
+const MenteeUser = mongoose.model('MenteeUser', Mentee);
 
 // ES Module export
-export default User;
+export default MenteeUser;

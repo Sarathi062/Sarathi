@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from './User-Model.js';
-
+import MenteeUser from './Mentee-Model.js';
 const SECRET_KEY = 'yashraj';
 
 // Middleware to authenticate token
@@ -20,7 +20,7 @@ const authenticateToken = (req, res, next) => {
 // Fetch profile controller
 const getProfileMentee = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await MenteeUser.findById(req.user.id);
         res.status(200).json({ profile: user });
     } catch (error) {
         res.status(500).json({ error: "Error fetching profile" });
@@ -37,7 +37,7 @@ const getProfileMentor = async (req, res) => {
 
 const getDashboardMentee = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await MenteeUser.findById(req.user.id);
         res.status(200).json({ profile: user });
     } catch (error) {
         res.status(500).json({ error: "Error fetching profile" });

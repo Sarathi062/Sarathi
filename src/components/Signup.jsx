@@ -1,10 +1,10 @@
-import  { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signup.css";
 
 const Signup = () => {
   const [generatedOTP, setGeneratedOTP] = useState(false);
-  const [OTPVerified, setOTPVerified] = useState(false);
+  const [OTPVerified, setOTPVerified] = useState(true);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -68,20 +68,15 @@ const Signup = () => {
       role,
       firstName,
       lastName,
-    //   profilePhoto,
       jobTitle,
       company,
       location,
       linkedin,
       skills,
-      educationStatus,
-      interests,
-      goals,
       experience,
-      
     } = formData;
     try {
-      const res = await fetch("http://localhost:3001/register", {
+      const res = await fetch("http://localhost:3001/register-mentor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -92,15 +87,11 @@ const Signup = () => {
           role,
           firstName,
           lastName,
-        //   profilePhoto,
           jobTitle,
           company,
           location,
           linkedin,
           skills,
-          educationStatus,
-          interests,
-          goals,
           experience,
         }),
       });
@@ -113,17 +104,67 @@ const Signup = () => {
       setFormData({
         email: "",
         password: "",
-        role: "mentee",
+        role: "mentor",
         firstName: "",
         lastName: "",
         jobTitle: "",
         company: "",
         location: "",
-        educationStatus: "",
-        // profilePhoto: null,
         linkedin: "",
         skills: "",
         experience: [{ role: "", company: "", duration: "" }],
+        otp: "",
+      });
+      navigate("/login");
+    } catch (error) {
+      window.alert(`Error: ${error.message}`);
+    }
+  };
+  const handleMenteeSubmit = async (e) => {
+    e.preventDefault();
+    const {
+      email,
+      password,
+      role,
+      firstName,
+      lastName,
+      skills,
+      educationStatus,
+      interests,
+      goals,
+    } = formData;
+    try {
+      const res = await fetch("http://localhost:3001/register-mentee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+          role,
+          firstName,
+          lastName,
+          skills,
+          educationStatus,
+          interests,
+          goals,
+        }),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error);
+      }
+      const resData = await res.json();
+      window.alert(resData.message);
+      setFormData({
+        email,
+        password: "",
+        role: "mentee",
+        firstName: "",
+        lastName: "",
+        skills: "",
+        educationStatus: "",
         interests: "",
         goals: "",
         otp: "",
@@ -133,7 +174,6 @@ const Signup = () => {
       window.alert(`Error: ${error.message}`);
     }
   };
-
   const verifyOTP = async () => {
     const { email, otp } = formData;
     const res = await fetch("http://localhost:3001/verify-otp", {
@@ -168,7 +208,11 @@ const Signup = () => {
   return (
     <div className="signup-container">
       <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={
+          formData.role === "mentor" ? handleSubmit : handleMenteeSubmit
+        }
+      >
         <label>Email:</label>
         <input
           type="email"

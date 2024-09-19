@@ -7,6 +7,7 @@ const Login = (props) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "mentee", // Default role
   });
   const [error, setError] = useState(""); // State to track error
 
@@ -20,10 +21,13 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { email, password } = formData;
+    const { email, password, role } = formData;
+
+    // Determine endpoint based on role selection
+    const endpoint = role === "mentor" ? "login" : "login-Mentee";
 
     try {
-      const res = await fetch("http://localhost:3001/login", {
+      const res = await fetch(`http://localhost:3001/${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,27 +39,23 @@ const Login = (props) => {
       });
 
       const data = await res.json();
-      console.log(data.user.role);
       if (!res.ok) {
         throw new Error(data.error);
       }
-
+      console.log(data.token);
       // Store the token in localStorage
       localStorage.setItem("token", data.token);
-      // props.setlogin(true);
       props.setLogedIn(true);
       setError("Login Successful");
 
-      if (data.user.role === "mentee") {
-        navigate("/");
+      if (role === "mentee") {
         props.setMenteeLogin(true);
       }
-      if (data.user.role === "mentor") {
-        navigate("/");
+      if (role === "mentor") {
         props.setMentorLogin(true);
       }
 
-      // navigate('/');
+      navigate("/");
     } catch (error) {
       setError(`${error.message}`);
     }
@@ -102,6 +102,26 @@ const Login = (props) => {
           </div>
         )}
 
+        {/* Role Selection */}
+        <div className="mb-4">
+          <label
+            className="block text-gray-700 text-sm font-semibold mb-2"
+            htmlFor="role"
+          >
+            Select Role
+          </label>
+          <select
+            id="role"
+            name="role"
+            className="shadow-sm border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:border-indigo-500 transition duration-200"
+            value={formData.role}
+            onChange={handleChange}
+          >
+            <option value="mentee">Mentee</option>
+            <option value="mentor">Mentor</option>
+          </select>
+        </div>
+
         {/* Login Form */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4 sm:mb-6">
@@ -109,7 +129,7 @@ const Login = (props) => {
               className="block text-gray-700 text-sm font-semibold mb-2"
               htmlFor="email"
             >
-              email
+              Email
             </label>
             <input
               className="shadow-sm appearance-none border border-gray-300 rounded-lg w-full py-3 px-4 text-gray-700 focus:outline-none focus:border-indigo-500 transition duration-200"
