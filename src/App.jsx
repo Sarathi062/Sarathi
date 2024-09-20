@@ -12,7 +12,9 @@ import MentorDashboard from "./components/MentorDashboard";
 import MenteeDashboard from "./components/MenteeDashboard";
 import ProfileMentee from "./components/ProfileMentee";
 import ProfileMentor from "./components/ProfileMentor";
-
+import SessionForm from "./components/SessionForm";
+import CreateSession from "./components/CreateSession";
+import EditProfile from "./components/EditProfile";
 function App() {
   const [mentorLogin, setMentorLogin] = useState(false);
   const [menteeLogin, setMenteeLogin] = useState(false);
@@ -51,13 +53,23 @@ function App() {
           <Route path="/mentee-dashboard" element={<MenteeDashboard setMenteeLogin={setMenteeLogin} setLogedIn={setLogedIn}/>} />
         )}
         {logedIn && mentorLogin && (
-          <Route path="/mentor-profile" element={<ProfileMentor setMentorLogin={setMentorLogin} setLogedIn={setLogedIn}/>} />
+          <Route path="/mentor-profile" element={<ProfileMentor setMentorLogin={setMentorLogin} setLogedIn={setLogedIn} />} />
         )}
         
         {logedIn && menteeLogin && (
           <Route path="/mentee-profile" element={<ProfileMentee setMenteeLogin={setMenteeLogin} setLogedIn={setLogedIn}/>} />
         )}
         
+        {logedIn  && (
+          <Route path="/session-form" element={<SessionForm />} />
+        )}
+        {logedIn && mentorLogin && (  
+          <Route path="/create-session" element={<CreateSession />} />
+        )}
+
+        {logedIn && mentorLogin && (  
+          <Route path="/edit-profile" element={<EditProfile />} />
+        )}
         {/* Redirect based on login */}
         {/* {logedIn && (
           <Route path="*" element={<Navigate to={menteeLogin ? "/dashboard" : "/mentor-dashboard"} />} />

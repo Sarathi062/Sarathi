@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 // Sample mentor data
@@ -21,11 +21,8 @@ const mentorsList = [
         Saturday: 'Unavailable',
         Sunday: 'Unavailable',
       },
-      rating: 4.9,
-      reviews: [
-        { reviewer: 'Alice', comment: 'Incredibly insightful sessions!', rating: 5 },
-        { reviewer: 'Bob', comment: 'Helped me understand complex topics.', rating: 4.8 },
-      ],
+      
+     
       socialLinks: {
         linkedin: 'https://www.linkedin.com/in/janesmith',
         twitter: 'https://twitter.com/janesmith',
@@ -154,7 +151,7 @@ const Mentors = () => {
       </div>
 
       {/* Rating and Reviews */}
-      <div className="mt-6">
+      {/* <div className="mt-6">
         <h2 className="text-xl font-semibold mb-4">Rating</h2>
         <div className="flex items-center">
           <p className="text-2xl font-bold mr-2">{mentor.rating}</p>
@@ -171,16 +168,18 @@ const Mentors = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Call to Action */}
       <div className="mt-6 text-center">
+        <Link to="/session-form" className="text-blue-600 hover:underline">
         <button
           // onClick={bookSession}
           className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300"
         >
           Book a Session
         </button>
+        </Link>
       </div>
     </div>
   );

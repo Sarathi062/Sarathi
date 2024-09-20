@@ -49,7 +49,7 @@ const Home = (props) => {
                 40+ Mentors
               </h2>
               <p className="text-gray-600">
-                Grabtern offers internships and global hackathons to connect with mentors.
+                Sarathi offers mentorship from experienced professionals across various fields
               </p>
             </div>
           </div>
