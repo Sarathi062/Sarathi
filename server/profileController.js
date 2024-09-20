@@ -67,8 +67,7 @@ const getEditMentor = async (req, res) => {
             skills,
             experience,
             language,
-            description, } = req.body;
-            console.log(req.body);                                          
+            description, } = req.body;                                      
         const updatedUser = await User.findByIdAndUpdate(req.user.id, {
             email,
             password,
@@ -126,6 +125,16 @@ const getSession = async (req, res) => {
         res.status(500).json({ error: "Error fetching sessions" });
     }
 }
+
+const getMentors = async (req, res) => {
+    try {
+        const mentors = await User.find({ role: "mentor" });
+        res.status(200).json({ mentors });
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching mentors" });
+    }
+}
+
 const registersession = async (req, res) => {
     try {
         const { mentor, mentee, date, time, duration, agenda } = req.body;
@@ -139,4 +148,4 @@ const registersession = async (req, res) => {
     }
 }
 // Export functions using ES module syntax
-export { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentee, getEditMentor, getDashboardMentor, registersession, createSession, getSession };
+export { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentee, getEditMentor, getDashboardMentor, registersession, createSession, getSession ,getMentors};

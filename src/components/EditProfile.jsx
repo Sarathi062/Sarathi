@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
@@ -29,80 +29,76 @@ const EditProfile = () => {
   };
 
   const handleExperienceChange = (index, field, value) => {
-    const newExperience = [...formData.experience];
-    newExperience[index][field] = value;
-    setFormData({ ...formData, experience: newExperience });
+    const updatedExperience = [...formData.experience];
+    updatedExperience[index][field] = value;
+    setFormData({ ...formData, experience: updatedExperience });
   };
 
   const addExperience = () => {
     setFormData({
       ...formData,
-      experience: [
-        ...formData.experience,
-        { role: "", company: "", duration: "" },
-      ],
+      experience: [...formData.experience, { role: "", company: "", duration: "" }],
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      jobTitle,
-      company,
-      location,
-      linkedin,
-      skills,
-      experience,
-      language,
-      description,
-    } = formData;
-    
+
     try {
-      
       const res = await fetch("http://localhost:3001/edit-mentor-profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({
-          email,
-          password,
-          firstName,
-          lastName,
-          jobTitle,
-          company,
-          location,
-          linkedin,
-          skills,
-          experience,
-          language,
-          description,
-        }),
+        body: JSON.stringify(formData),
       });
+
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error);
+        throw new Error(errorData.error || "Failed to update profile");
       }
+
       const resData = await res.json();
       window.alert(resData.message);
-      // navigate("/login");
+      // You can redirect after successful update
+      // navigate("/some-path");
     } catch (error) {
-      window.alert(`Error: ${error.message}`);
+      setError(`Error: ${error.message}`);
     }
   };
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const res = await fetch("http://localhost:3001/profile-mentor", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Error fetching profile");
+        }
+
+        const resData = await res.json();
+        setFormData(resData.profile);
+      } catch (error) {
+        setError("Error fetching profile");
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-md">
       {error && <p className="text-red-600">{error}</p>}
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Email and Password Fields */}
           <div>
             <label className="block mb-2">Email</label>
             <input
@@ -125,20 +121,10 @@ const EditProfile = () => {
               required
             />
           </div>
-          {[
-            "firstName",
-            "lastName",
-            "jobTitle",
-            "company",
-            "location",
-            "linkedin",
-            "skills",
-            "language",
-          ].map((field) => (
+          {["firstName", "lastName", "jobTitle", "company", "location", "linkedin", "skills", "language"].map((field) => (
             <div key={field}>
               <label className="block mb-2">
-                {field.charAt(0).toUpperCase() +
-                  field.slice(1).replace(/([A-Z])/g, " ")}
+                {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, " ")}
               </label>
               <input
                 type="text"
@@ -149,8 +135,6 @@ const EditProfile = () => {
               />
             </div>
           ))}
-
-          {/* Experience Section */}
           <div>
             <h3>Experience</h3>
             {formData.experience.map((exp, index) => (
@@ -159,9 +143,7 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={exp.role}
-                  onChange={(e) =>
-                    handleExperienceChange(index, "role", e.target.value)
-                  }
+                  onChange={(e) => handleExperienceChange(index, "role", e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                   required
                 />
@@ -169,9 +151,7 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={exp.company}
-                  onChange={(e) =>
-                    handleExperienceChange(index, "company", e.target.value)
-                  }
+                  onChange={(e) => handleExperienceChange(index, "company", e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                   required
                 />
@@ -179,9 +159,7 @@ const EditProfile = () => {
                 <input
                   type="text"
                   value={exp.duration}
-                  onChange={(e) =>
-                    handleExperienceChange(index, "duration", e.target.value)
-                  }
+                  onChange={(e) => handleExperienceChange(index, "duration", e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                   required
                 />
@@ -196,7 +174,6 @@ const EditProfile = () => {
             </button>
           </div>
 
-          {/* Description Field */}
           <div>
             <label className="block mb-2">Description</label>
             <textarea
@@ -206,7 +183,6 @@ const EditProfile = () => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-
         </div>
         <button
           type="submit"
