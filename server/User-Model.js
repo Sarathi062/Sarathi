@@ -1,3 +1,4 @@
+// import { language } from 'googleapis/build/src/apis/language';
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
@@ -45,7 +46,14 @@ const UserSchema = new mongoose.Schema({
     experience: {
         type: Array,
         // required: true
-    }
+    },
+    language:{
+        type: String,
+    },
+    description: {
+        type: String,
+    },
+    
 });
 
 const User = mongoose.model('User', UserSchema);

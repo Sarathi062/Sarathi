@@ -3,7 +3,7 @@ import User from './User-Model.js';
 import MenteeUser from './Mentee-Model.js';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
-import { google } from 'googleapis';
+// import { google } from 'googleapis';
 
 const OTPs = {};
 const SECRET_KEY = 'yashraj'; // Keep this key secure
@@ -15,7 +15,7 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        console.log(user);
+        // console.log(user);
 
         if (!user) {
             return res.status(400).json({ error: "User not found" });

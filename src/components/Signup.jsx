@@ -15,7 +15,6 @@ const Signup = () => {
     company: "",
     location: "",
     educationStatus: "",
-    // profilePhoto: null,
     linkedin: "",
     skills: "",
     experience: [{ role: "", company: "", duration: "" }],

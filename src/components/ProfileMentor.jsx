@@ -44,6 +44,9 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
       console.error("Error loading dashboard:", error);
     }
   };
+  const handleEditProfile = () => {
+    navigate("/edit-profile");
+  }
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -105,6 +108,12 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
               className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition"
             >
               Logout
+            </button>
+            <button
+              onClick={handleEditProfile}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+            >
+              Edit Profile
             </button>
           </div>
         </div>
