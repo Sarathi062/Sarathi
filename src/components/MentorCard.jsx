@@ -1,54 +1,88 @@
 import React from "react";
-import { FaLinkedin, FaTwitter } from "react-icons/fa"; // Import LinkedIn and Twitter icons
-import { useNavigate } from "react-router-dom"; // Import useNavigate hook
+import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const MentorCard = ({ mentor }) => {
-  const navigate = useNavigate(); // Initialize navigate function
+  const navigate = useNavigate();
 
   const onClick = () => {
-    navigate(`/Mentors/${mentor.id}`); // Navigate to the mentor profile using ID
+    navigate(`/Mentors/${mentor._id}`);
+  };
+
+  // Function to calculate total experience duration
+  const getTotalExperience = () => {
+    return mentor.experience.reduce((total, exp) => total + exp.duration, 0);
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-blue-500 max-w-sm mx-auto">
+    <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-blue-500 max-w-xs mx-auto flex flex-col items-center">
+      {/* Profile Image with Placeholder Fallback */}
       <img
-        src={`https://picsum.photos/seed/${mentor.id}/200/200`}
-        alt={mentor.name}
-        className="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-gray-200"
+        src={`https://picsum.photos/seed/${mentor._id}/200/200`} // Use dynamic placeholder
+        onError={(e) => (e.target.src = "/default-avatar.png")} // Fallback to default image
+        alt={`${mentor.firstName} ${mentor.lastName}`}
+        className="w-32 h-32 rounded-full mb-4 border-4 border-gray-200 object-cover"
       />
-      <h2 className="text-2xl font-bold text-center">{mentor.name}</h2>
-      <p className="text-center text-sm text-gray-600">{mentor.title}</p>
-      <p className="mt-4 text-center">{mentor.description}</p>
 
-      <div className="mt-6">
-        {/* Additional Mentor Details */}
-        <div className="flex justify-between items-center mb-2">
-          <p className="font-semibold text-gray-800">Session Type:</p>
-          <p className="text-gray-600">{mentor.sessionType}</p>
-        </div>
-        <div className="flex justify-between items-center mb-2">
-          <p className="font-semibold text-gray-800">Experience Level:</p>
-          <p className="text-gray-600">{mentor.experienceLevel}</p>
-        </div>
-        <div className="flex justify-between items-center mb-2">
+      {/* Mentor Name and Title */}
+      <h2 className="text-2xl font-bold text-center mb-1">
+        {mentor.firstName} {mentor.lastName}
+      </h2>
+      <p className="text-center text-sm text-gray-600 mb-3">{mentor.jobTitle}</p>
+
+      {/* Mentor Description */}
+      <p className="mt-1 text-center text-gray-700 text-sm mb-4">
+        {mentor.description ? mentor.description : "No description available."}
+      </p>
+
+      {/* Mentor Details */}
+      <div className="w-full space-y-3">
+        <div className="flex justify-between items-center">
           <p className="font-semibold text-gray-800">Language:</p>
-          <p className="text-gray-600">{mentor.language}</p>
+          <p className="text-gray-600">{mentor.language || "N/A"}</p>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <p className="font-semibold text-gray-800">Total Experience:</p>
+          <p className="text-gray-600">{getTotalExperience()} years</p>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <p className="font-semibold text-gray-800">Location:</p>
+          <p className="text-gray-600">{mentor.location || "Remote"}</p>
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-6">
-        {/* Social Icons */}
+      {/* Social Media and Connect Button */}
+      <div className="flex justify-between items-center mt-6 w-full">
         <div className="flex space-x-4">
-          <a href="#" className="text-blue-600 hover:text-blue-800">
-            <FaLinkedin size={24} />
-          </a>
-          <a href="#" className="text-blue-400 hover:text-blue-600">
-            <FaTwitter size={24} />
-          </a>
+          {mentor.linkedin && (
+            <a
+              href={mentor.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn profile"
+              className="text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              <FaLinkedin size={24} />
+            </a>
+          )}
+          {mentor.twitter && (
+            <a
+              href={mentor.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Twitter profile"
+              className="text-blue-400 hover:text-blue-600 transition-colors"
+            >
+              <FaTwitter size={24} />
+            </a>
+          )}
         </div>
-
-        {/* Connect Button */}
-        <button className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300" onClick={onClick}>
+        <button
+          className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300"
+          onClick={onClick}
+        >
           Connect
         </button>
       </div>
