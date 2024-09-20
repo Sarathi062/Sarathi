@@ -44,7 +44,7 @@ const MentorCard = ({ mentor }) => {
       {/* Social Icons and Connect Button */}
       <div className="flex justify-between items-center mt-6 w-full">
         <div className="flex space-x-4">
-          <a href="#" className="text-blue-600 hover:text-blue-800">
+          <a href={mentor.linkedin} className="text-blue-600 hover:text-blue-800">
             <FaLinkedin size={24} />
           </a>
           <a href="#" className="text-blue-400 hover:text-blue-600">
