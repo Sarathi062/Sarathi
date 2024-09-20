@@ -41,7 +41,7 @@ const MentorDashboard = () => {
   const fetchCreatedSessions = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3001/get-session", {
+      const res = await fetch("http://localhost:3001/get-session-mentor", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

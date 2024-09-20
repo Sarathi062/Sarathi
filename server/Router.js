@@ -1,6 +1,6 @@
 import express from 'express';
 import { login,loginMentee, registerMentor,registerMentee, sendOTP, verifyOTP} from './authController.js';
-import { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentor, getEditMentor, getDashboardMentee ,registersession,createSession,getSession,getMentors} from './profileController.js';
+import { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentor, getEditMentor, getDashboardMentee ,registersession,createSession,getSession,getMentors ,getSessiondetails} from './profileController.js';
 import { create } from 'zustand';
 
 const router = express.Router();
@@ -24,6 +24,7 @@ router.route('/edit-mentor-profile').post(authenticateToken, getEditMentor);
 
 router.route('/create-session').post(authenticateToken, createSession);
 router.route('/get-session').get(authenticateToken, getSession);
+router.route('/get-session-mentor').get(authenticateToken, getSessiondetails);
 router.route('/PostMenteeUsersession').post(registersession);
 
 // router.route('/auth').get(auth);

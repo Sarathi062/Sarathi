@@ -67,7 +67,7 @@ const getEditMentor = async (req, res) => {
             skills,
             experience,
             language,
-            description, } = req.body;                                      
+            description, } = req.body;
         const updatedUser = await User.findByIdAndUpdate(req.user.id, {
             email,
             password,
@@ -119,9 +119,27 @@ const createSession = async (req, res) => {
 };
 const getSession = async (req, res) => {
     try {
+        const mentorID = req.headers.mentorid; // Extract mentorID from headers
+
+        if (!mentorID) {
+            return res.status(400).json({ error: "mentorID is required in headers" });
+        }
+
+        const sessions = await CreatedSession.find({ mentorID });
+        res.status(200).json({ sessions });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).json({ error: "Error fetching sessions" });
+    }
+};
+
+const getSessiondetails = async (req, res) => {
+    try {
+        // Assuming 'mentorID' is a field in the 'CreatedSession' schema
         const sessions = await CreatedSession.find({ mentorID: req.user.id });
         res.status(200).json({ sessions });
     } catch (error) {
+        console.error("Error fetching sessions:", error);
         res.status(500).json({ error: "Error fetching sessions" });
     }
 }
@@ -148,4 +166,4 @@ const registersession = async (req, res) => {
     }
 }
 // Export functions using ES module syntax
-export { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentee, getEditMentor, getDashboardMentor, registersession, createSession, getSession ,getMentors};
+export { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentee, getEditMentor, getDashboardMentor, registersession, createSession, getSession, getMentors ,getSessiondetails};
