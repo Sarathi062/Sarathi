@@ -10,12 +10,15 @@ export default function ProfileMentee(props) {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await fetch("http://localhost:3001/profile-mentee", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/profile-mentee",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 
       const data = await res.json();
       console.log(data);
@@ -32,13 +35,16 @@ export default function ProfileMentee(props) {
   const loadDashboard = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3001/dashboard-mentee", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/dashboard-mentee",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+      // const data = await res.json();
       if (!res.ok) {
         navigate("/login");
       }

@@ -8,12 +8,15 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3001/profile-mentor", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/profile-mentor",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
 
       const data = await res.json();
       if (!res.ok) {
@@ -28,13 +31,16 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
   const loadDashboard = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3001/dashboard-mentor", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/dashboard-mentor",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+      // const data = await res.json();
       if (!res.ok) {
         navigate("/login");
       }

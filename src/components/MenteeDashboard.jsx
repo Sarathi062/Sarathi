@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const MenteeDashboard = () => {
@@ -8,12 +8,15 @@ const MenteeDashboard = () => {
   const loadDashboard = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("http://localhost:3001/dashboard-mentee", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/dashboard-mentee",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
       const data = await res.json();
       if (!res.ok) {
         navigate("/login");

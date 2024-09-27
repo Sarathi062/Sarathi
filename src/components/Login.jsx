@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -27,16 +27,19 @@ const Login = (props) => {
     const endpoint = role === "mentor" ? "login" : "login-Mentee";
 
     try {
-      const res = await fetch(`http://localhost:3001/${endpoint}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const res = await fetch(
+				`https://sarathi-backend-ten.vercel.app/${endpoint}`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						email,
+						password,
+					}),
+				}
+			);
 
       const data = await res.json();
       if (!res.ok) {
@@ -180,7 +183,7 @@ const Login = (props) => {
 
           {/* Create Account */}
           <div className="text-center mt-6">
-            <span className="text-gray-600">Don't have an account? </span>
+            <span className="text-gray-600">Don you have an account? </span>
             <Link
               className="font-semibold text-indigo-500 hover:text-indigo-700 transition duration-200"
               to="/signup"

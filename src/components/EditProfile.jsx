@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -45,14 +45,17 @@ const EditProfile = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3001/edit-mentor-profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/edit-mentor-profile",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+					body: JSON.stringify(formData),
+				}
+			);
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -73,12 +76,15 @@ const EditProfile = () => {
       const token = localStorage.getItem("token");
 
       try {
-        const res = await fetch("http://localhost:3001/profile-mentor", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+					"https://sarathi-backend-ten.vercel.app/profile-mentor",
+					{
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${token}`,
+						},
+					}
+				);
 
         if (!res.ok) {
           throw new Error("Error fetching profile");
@@ -87,7 +93,7 @@ const EditProfile = () => {
         const resData = await res.json();
         setFormData(resData.profile);
       } catch (error) {
-        setError("Error fetching profile");
+        setError("Error fetching profile",error);
       }
     };
 

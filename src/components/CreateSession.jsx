@@ -26,14 +26,17 @@ const CreateSession = () => {
     e.preventDefault();
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://localhost:3001/create-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/create-session",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
+					},
+					body: JSON.stringify(formData),
+				}
+			);
       const data = await res.json();
       if (!res.ok) {
         throw new Error(data.error || "Unknown error occurred");
