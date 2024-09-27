@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signup.css";
 
@@ -254,16 +254,6 @@ const Signup = () => {
           onChange={handleChange}
           required
         />
-        <br />
-        {/* <label>Profile Photo:</label>
-        <input
-          type="file"
-          name="profilePhoto"
-          onChange={handleChange}
-          accept="image/*"
-          required
-        /> */}
-        <br />
 
         {/* Mentor-specific fields */}
         {formData.role === "mentor" && (

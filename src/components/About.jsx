@@ -1,4 +1,3 @@
-import React from "react";
 import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa"; // Icons for social media
 
 const AboutPage = () => {
