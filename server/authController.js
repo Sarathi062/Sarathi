@@ -15,7 +15,7 @@ export const login = async (req, res) => {
 
         const user = await User.findOne({ email });
 
-        // console.log(user);
+        
 
         if (!user) {
             return res.status(400).json({ error: "User not found" });
@@ -39,7 +39,7 @@ export const loginMentee = async (req, res) => {
 
         const user = await MenteeUser.findOne({ email });
 
-        console.log(user);
+        
 
         if (!user) {
             return res.status(400).json({ error: "User not found" });
@@ -68,7 +68,7 @@ const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: 'sarathi062023@gmail.com',
-        pass: 'eilr ntrk zvnj mugj',
+        pass: process.env.pass,
     },
 });
 

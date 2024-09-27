@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
-const uri ='mongodb+srv://yashrajdhamale:JYCyk4W7a5JASivj@mentor.7x8l1.mongodb.net/Sarathi'; // Connection URL
+// Load environment variables from .env file
+dotenv.config();
+
+const uri = process.env.DBURI; // Connection URL
 
 const ConnectDB = async () => {
     try {
@@ -12,5 +16,4 @@ const ConnectDB = async () => {
     }
 };
 
-// Export function using ES module syntax
 export default ConnectDB;

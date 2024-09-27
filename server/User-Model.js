@@ -53,6 +53,12 @@ const UserSchema = new mongoose.Schema({
     description: {
         type: String,
     },
+    access_token: {
+        type: String,
+    },
+    refresh_token: {
+        type: String,
+    },
     
 });
 

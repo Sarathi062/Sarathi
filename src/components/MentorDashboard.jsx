@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./MentorDashboard.css";
 import SessionCard from "./SessionCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx"; // New loading spinner component
@@ -12,6 +12,8 @@ const MentorDashboard = () => {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // For searching sessions
   const navigate = useNavigate();
+  const [calendarId, setCalendarId] = useState(null);
+
 
   const fetchDashboardData = async () => {
     try {
@@ -59,10 +61,30 @@ const MentorDashboard = () => {
       setError("Error fetching created sessions.");
     }
   };
+  const fetchUserCalendar = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:3001/user/calendar", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        throw new Error("Error fetching user calendar.");
+      }
+      const data = await res.json();
+      setCalendarId(data.calendarId);
 
+    } catch (error) {
+      setError("Error fetching user calendar.");
+    }
+  };
   useEffect(() => {
     fetchDashboardData();
     fetchCreatedSessions();
+    fetchUserCalendar();
   }, []);
 
   const handleSearch = (e) => {
@@ -73,6 +95,29 @@ const MentorDashboard = () => {
     session.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const addEvent = async () => {
+    const res = await fetch("http://localhost:3001/add-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        title: "Event Title",
+        description: "Event Description",
+        start: "2024-09-01T10:00:00",
+        end: "2024-09-01T11:00:00",
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+    if (res.ok) {
+      alert("Event added to calendar");
+    } else {
+      alert("Error adding event to calendar");
+    }
+
+  };
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
       <h1 className="text-2xl font-bold">Mentor Dashboard</h1>
@@ -121,16 +166,21 @@ const MentorDashboard = () => {
 
           {/* Right column - Created Sessions */}
           <div className="w-1/2">
-            <iframe
-              src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=your_timezone"
-              style={{ border: 0 }}
-              width="100%"
-              height="400"
-              frameBorder="0"
-              scrolling="no"
-              title="Google Calendar"
-            ></iframe>
-
+          <iframe
+            src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=America/Los_Angeles`}
+            style={{ border: 0 }}
+            width="100%"
+            height="400"
+            frameBorder="0"
+            scrolling="no"
+            title="User's Google Calendar"
+        ></iframe>
+            <Link to="/authentication">
+              <button style={{ background: "green" }}>Authenticate</button>
+            </Link>
+            <button style={{ background: "red" }} onClick={addEvent}>
+              Add Event to calendar
+            </button>
             {/* Search Bar */}
             <div className="mt-4">
               <input

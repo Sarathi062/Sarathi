@@ -42,7 +42,7 @@ const Login = (props) => {
       if (!res.ok) {
         throw new Error(data.error);
       }
-      console.log(data.token);
+      // console.log(data.token);
       // Store the token in localStorage
       localStorage.setItem("token", data.token);
       props.setLogedIn(true);

@@ -1,10 +1,11 @@
-//import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 import express from 'express'; 
 import ConnectDB from './ConnectDB.js'; 
 import router from './Router.js';
 import cors from 'cors';
 
-//dotenv.config(); // Configure dotenv to load environment variables
+dotenv.config(); // Configure dotenv to load environment variables
+
 
 const app = express(); 
 const PORT = 3001;
