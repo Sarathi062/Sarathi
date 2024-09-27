@@ -19,21 +19,27 @@ const Authentication = () => {
         );
   
         // Listen for the message from the popup (authentication success)
-        window.addEventListener('message', (event) => {
+        const handleAuthMessage = (event) => {
           if (event.data.success) {
-            // Close the popup (just in case)
+            // Close the popup
             if (popup && !popup.closed) {
               popup.close();
             }
-            
-            navigate('/mentor-dashboard');
+  
+            // Navigate to the dashboard after a brief delay
+            setTimeout(() => {
+              navigate('/mentor-dashboard');
+            }, 100); // Adjust the timeout as necessary
           }
-        }, { once: true }); // Listen once
+        };
+  
+        window.addEventListener('message', handleAuthMessage, { once: true }); // Listen once
       })
       .catch(error => {
         console.error('Error fetching OAuth URL:', error);
       });
   }
+  
 
   return (
     <div>
