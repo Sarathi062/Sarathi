@@ -15,7 +15,6 @@ import ProfileMentor from "./components/ProfileMentor";
 import SessionForm from "./components/SessionForm";
 import CreateSession from "./components/CreateSession";
 import EditProfile from "./components/EditProfile";
-import Authentication from "./components/Authentication";
 function App() {
   const [mentorLogin, setMentorLogin] = useState(false);
   const [menteeLogin, setMenteeLogin] = useState(false);
@@ -72,9 +71,7 @@ function App() {
           <Route path="/edit-profile" element={<EditProfile />} />
         )}
 
-        {logedIn && mentorLogin && (
-          <Route path="/authentication" element={<Authentication />} />
-        )}
+        
         {/* Redirect based on login */}
         {/* {logedIn && (
           <Route path="*" element={<Navigate to={menteeLogin ? "/dashboard" : "/mentor-dashboard"} />} />

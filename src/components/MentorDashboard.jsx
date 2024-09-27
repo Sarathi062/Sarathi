@@ -14,7 +14,6 @@ const MentorDashboard = () => {
   const navigate = useNavigate();
   const [calendarId, setCalendarId] = useState(null);
 
-
   const fetchDashboardData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -76,9 +75,8 @@ const MentorDashboard = () => {
       }
       const data = await res.json();
       setCalendarId(data.calendarId);
-
     } catch (error) {
-      setError("Error fetching user calendar.");
+      setError("");
     }
   };
   useEffect(() => {
@@ -86,7 +84,41 @@ const MentorDashboard = () => {
     fetchCreatedSessions();
     fetchUserCalendar();
   }, []);
+  function openGoogleAuthPopup() {
+    // Call your back-end to get the OAuth URL
+    fetch("http://localhost:3001/auth")
+      .then((response) => response.json())
+      .then((data) => {
+        const authUrl = data.url;
 
+        // Open the URL in a popup
+        const popup = window.open(
+          authUrl,
+          "googleAuthPopup",
+          "width=500,height=600"
+        );
+
+        // Listen for the message from the popup (authentication success)
+        const handleAuthMessage = (event) => {
+          if (event.data.success) {
+            // Close the popup
+            if (popup && !popup.closed) {
+              popup.close();
+            }
+
+            // Navigate to the dashboard after a brief delay
+            setTimeout(() => {
+              navigate("/mentor-dashboard");
+            }, 100); // Adjust the timeout as necessary
+          }
+        };
+
+        window.addEventListener("message", handleAuthMessage, { once: true }); // Listen once
+      })
+      .catch((error) => {
+        console.error("Error fetching OAuth URL:", error);
+      });
+  }
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
@@ -116,7 +148,6 @@ const MentorDashboard = () => {
     } else {
       alert("Error adding event to calendar");
     }
-
   };
   return (
     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
@@ -166,18 +197,23 @@ const MentorDashboard = () => {
 
           {/* Right column - Created Sessions */}
           <div className="w-1/2">
-          <iframe
-            src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=America/Los_Angeles`}
-            style={{ border: 0 }}
-            width="100%"
-            height="400"
-            frameBorder="0"
-            scrolling="no"
-            title="User's Google Calendar"
-        ></iframe>
-            <Link to="/authentication">
-              <button style={{ background: "green" }}>Authenticate</button>
-            </Link>
+            <iframe
+              src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=America/Los_Angeles`}
+              style={{ border: 0 }}
+              width="100%"
+              height="400"
+              frameBorder="0"
+              scrolling="no"
+              title="User's Google Calendar"
+            ></iframe>
+
+            <button
+              style={{ background: "green" }}
+              onClick={openGoogleAuthPopup}
+            >
+              Authenticate
+            </button>
+
             <button style={{ background: "red" }} onClick={addEvent}>
               Add Event to calendar
             </button>
