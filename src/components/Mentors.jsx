@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaLinkedin } from "react-icons/fa";
 
 const Mentors = () => {
-  const { id } = useParams(); // Extracting the mentor ID from URL
+  const { id } = useParams(); 
   const [mentor, setMentor] = useState(null);
-  const [sessions, setSessions] = useState([]); // State for session data
+  const [sessions, setSessions] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,8 +17,8 @@ const Mentors = () => {
 
         // Fetch mentor profiles
         const mentorResponse = await fetch(
-          "http://localhost:3001/get-mentor-profiles"
-        );
+					"https://sarathi-backend-ten.vercel.app/get-mentor-profiles"
+				);
         if (!mentorResponse.ok) {
           throw new Error("Failed to fetch mentor profiles");
         }
@@ -36,27 +36,27 @@ const Mentors = () => {
 
         // Fetch session data
         const sessionResponse = await fetch(
-          "http://localhost:3001/get-session",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-              mentorID: id,
-            },
-          }
-        );
+					"https://sarathi-backend-ten.vercel.app/get-session",
+					{
+						method: "GET",
+						headers: {
+							Authorization: `Bearer ${localStorage.getItem("token")}`,
+							mentorID: id,
+						},
+					}
+				);
 
         if (!sessionResponse.ok) {
           throw new Error("Failed to fetch session data");
         }
 
         const sessionData = await sessionResponse.json();
-        setSessions(sessionData.sessions); // Set the session data
+        setSessions(sessionData.sessions); 
       } catch (error) {
         console.error("Error:", error);
         setError(error.message || "An error occurred while fetching data");
       } finally {
-        setLoading(false); // Ensure loading is turned off
+        setLoading(false); 
       }
     };
 

@@ -75,25 +75,28 @@ const Signup = () => {
       experience,
     } = formData;
     try {
-      const res = await fetch("http://localhost:3001/register-mentor", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          role,
-          firstName,
-          lastName,
-          jobTitle,
-          company,
-          location,
-          linkedin,
-          skills,
-          experience,
-        }),
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/register-mentor",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						email,
+						password,
+						role,
+						firstName,
+						lastName,
+						jobTitle,
+						company,
+						location,
+						linkedin,
+						skills,
+						experience,
+					}),
+				}
+			);
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error);
@@ -133,23 +136,26 @@ const Signup = () => {
       goals,
     } = formData;
     try {
-      const res = await fetch("http://localhost:3001/register-mentee", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          role,
-          firstName,
-          lastName,
-          skills,
-          educationStatus,
-          interests,
-          goals,
-        }),
-      });
+      const res = await fetch(
+				"https://sarathi-backend-ten.vercel.app/register-mentee",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						email,
+						password,
+						role,
+						firstName,
+						lastName,
+						skills,
+						educationStatus,
+						interests,
+						goals,
+					}),
+				}
+			);
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error);
@@ -175,11 +181,14 @@ const Signup = () => {
   };
   const verifyOTP = async () => {
     const { email, otp } = formData;
-    const res = await fetch("http://localhost:3001/verify-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, otp }),
-    });
+    const res = await fetch(
+			"https://sarathi-backend-ten.vercel.app/verify-otp",
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ email, otp }),
+			}
+		);
     const data = await res.json();
     if (data.success) {
       alert("OTP verified");
@@ -191,11 +200,11 @@ const Signup = () => {
 
   const generateOTP = async () => {
     setGeneratedOTP(true);
-    const res = await fetch("http://localhost:3001/sendOTP", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: formData.email }),
-    });
+    const res = await fetch("https://sarathi-backend-ten.vercel.app/sendOTP", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email: formData.email }),
+		});
     const data = await res.json();
     if (data.success) {
       alert("OTP sent to your email");

@@ -16,7 +16,9 @@ const MentorCardPage = () => {
 
 	const fetchMentors = async () => {
 		try {
-			const response = await fetch("http://localhost:3001/get-mentor-profiles");
+			const response = await fetch(
+				"https://sarathi-backend-ten.vercel.app/get-mentor-profiles"
+			);
 			const data = await response.json();
 			return data.mentors;
 		} catch (error) {
