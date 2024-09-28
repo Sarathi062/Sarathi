@@ -5,7 +5,7 @@ const MentorCard = ({ mentor }) => {
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate(`/Mentors/${mentor.id}`);
+    navigate(`/Mentors/${mentor._id}`);
   };
 
   // Function to calculate total experience duration
@@ -17,17 +17,19 @@ const MentorCard = ({ mentor }) => {
     <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border hover:border-blue-500 max-w-xs mx-auto flex flex-col items-center">
       {/* Profile Image with Placeholder Fallback */}
       <img
-        src={`https://picsum.photos/seed/${mentor._id}/200/200`} 
-        onError={(e) => (e.target.src = "/default-avatar.png")} 
+        src={`https://picsum.photos/seed/${mentor._id}/200/200`} // Use dynamic placeholder
+        onError={(e) => (e.target.src = "/default-avatar.png")} // Fallback to default image
         alt={`${mentor.firstName} ${mentor.lastName}`}
         className="w-32 h-32 rounded-full mb-4 border-4 border-gray-200 object-cover"
       />
 
+      {/* Mentor Name and Title */}
       <h2 className="text-2xl font-bold text-center mb-1">
         {mentor.firstName} {mentor.lastName}
       </h2>
       <p className="text-center text-sm text-gray-600 mb-3">{mentor.jobTitle}</p>
 
+      {/* Mentor Description */}
       <p className="mt-1 text-center text-gray-700 text-sm mb-4">
         {mentor.description ? mentor.description : "No description available."}
       </p>

@@ -2,22 +2,23 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./MentorDashboard.css";
 import SessionCard from "./SessionCard.jsx";
-import LoadingSpinner from "./LoadingSpinner.jsx"; // New loading spinner component
+import LoadingSpinner from "./LoadingSpinner.jsx";
 
 const MentorDashboard = () => {
-	// const [dashboardData, setDashboardData] = useState(null);
+	const [dashboardData, setDashboardData] = useState(null);
 	const [sessionRequests, setSessionRequests] = useState([]);
 	const [createdSessions, setCreatedSessions] = useState([]);
 	const [loading, setLoading] = useState(true); // Loading state
 	const [error, setError] = useState(null);
-	const [searchQuery, setSearchQuery] = useState(""); // For searching sessions
+	const [searchQuery, setSearchQuery] = useState("");
 	const navigate = useNavigate();
+	const [calendarId, setCalendarId] = useState(null);
 
 	const fetchDashboardData = async () => {
 		try {
 			const token = localStorage.getItem("token");
 			const res = await fetch(
-				"https://sarathi-backend-ten.vercel.app/dashboard-mentor",
+				"https://sarathi-backend-cgm8.onrender.com/dashboard-mentor",
 				{
 					method: "GET",
 					headers: {
@@ -30,13 +31,13 @@ const MentorDashboard = () => {
 			if (!res.ok) {
 				navigate("/login");
 			} else {
-				// setDashboardData(data);
+				setDashboardData(data);
 				setSessionRequests(data.sessionRequests || []);
 				setCreatedSessions(data.createdSessions || []);
 				setLoading(false); // Stop loading after data is fetched
 			}
 		} catch (error) {
-			setError("Failed to load dashboard data.",error);
+			setError("Failed to load dashboard data.", error);
 			setLoading(false);
 		}
 	};
@@ -45,7 +46,7 @@ const MentorDashboard = () => {
 		const token = localStorage.getItem("token");
 		try {
 			const res = await fetch(
-				"https://sarathi-backend-ten.vercel.app/get-session-mentor",
+				"https://sarathi-backend-cgm8.onrender.com/get-session-mentor",
 				{
 					method: "GET",
 					headers: {
@@ -62,15 +63,71 @@ const MentorDashboard = () => {
 				setCreatedSessions(data.sessions);
 			}
 		} catch (error) {
-			setError("Error fetching created sessions.",error);
+			setError("Error fetching created sessions.", error);
 		}
 	};
-
+	const fetchUserCalendar = async () => {
+		const token = localStorage.getItem("token");
+		try {
+			const res = await fetch(
+				"https://sarathi-backend-cgm8.onrender.com/user/calendar",
+				{
+					method: "GET",
+					headers: {
+						Authorization: `Bearer ${token}`,
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			if (!res.ok) {
+				throw new Error("Error fetching user calendar.");
+			}
+			const data = await res.json();
+			setCalendarId(data.calendarId);
+		} catch (error) {
+			setError("", error);
+		}
+	};
 	useEffect(() => {
 		fetchDashboardData();
 		fetchCreatedSessions();
+		fetchUserCalendar();
 	}, []);
+	function openGoogleAuthPopup() {
+		// Call your back-end to get the OAuth URL
+		fetch("https://sarathi-backend-cgm8.onrender.com/auth")
+			.then((response) => response.json())
+			.then((data) => {
+				const authUrl = data.url;
 
+				// Open the URL in a popup
+				const popup = window.open(
+					authUrl,
+					"googleAuthPopup",
+					"width=500,height=600"
+				);
+
+				// Listen for the message from the popup (authentication success)
+				const handleAuthMessage = (event) => {
+					if (event.data.success) {
+						// Close the popup
+						if (popup && !popup.closed) {
+							popup.close();
+						}
+
+						// Navigate to the dashboard after a brief delay
+						setTimeout(() => {
+							navigate("/mentor-dashboard");
+						}, 100); // Adjust the timeout as necessary
+					}
+				};
+
+				window.addEventListener("message", handleAuthMessage, { once: true }); // Listen once
+			})
+			.catch((error) => {
+				console.error("Error fetching OAuth URL:", error);
+			});
+	}
 	const handleSearch = (e) => {
 		setSearchQuery(e.target.value);
 	};
@@ -79,30 +136,31 @@ const MentorDashboard = () => {
 		session.title.toLowerCase().includes(searchQuery.toLowerCase())
 	);
 
-	const handleApproveRequest = async (requestId) => {
-		try {
-			const token = localStorage.getItem("token");
-			const res = await fetch(
-				`https://sarathi-backend-ten.vercel.app/approve-request/${requestId}`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-
-			if (res.ok) {
-				// Update the session requests state after approval
-				setSessionRequests((prevRequests) =>
-					prevRequests.filter((request) => request.id !== requestId)
-				);
+	const addEvent = async () => {
+		const res = await fetch(
+			"https://sarathi-backend-cgm8.onrender.com/add-event",
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+				},
+				body: JSON.stringify({
+					title: "Event Title",
+					description: "Event Description",
+					start: "2024-09-01T10:00:00",
+					end: "2024-09-01T11:00:00",
+				}),
 			}
-		} catch (error) {
-			setError("Error approving session request.",error);
+		);
+		const data = await res.json();
+		console.log(data);
+		if (res.ok) {
+			alert("Event added to calendar");
+		} else {
+			alert("Error adding event to calendar");
 		}
 	};
-
 	return (
 		<div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
 			<h1 className="text-2xl font-bold">Mentor Dashboard</h1>
@@ -152,15 +210,25 @@ const MentorDashboard = () => {
 					{/* Right column - Created Sessions */}
 					<div className="w-1/2">
 						<iframe
-							src="https://calendar.google.com/calendar/embed?src=your_calendar_id&ctz=your_timezone"
+							src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=America/Los_Angeles`}
 							style={{ border: 0 }}
 							width="100%"
 							height="400"
 							frameBorder="0"
 							scrolling="no"
-							title="Google Calendar"
+							title="User's Google Calendar"
 						></iframe>
 
+						<button
+							style={{ background: "green" }}
+							onClick={openGoogleAuthPopup}
+						>
+							Authenticate
+						</button>
+
+						<button style={{ background: "red" }} onClick={addEvent}>
+							Add Event to calendar
+						</button>
 						{/* Search Bar */}
 						<div className="mt-4">
 							<input
