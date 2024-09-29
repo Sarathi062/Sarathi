@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { AiOutlineRobot } from "react-icons/ai"; // Importing an AI robot icon for more AI-like feel
 
-import LoginAuth from "./LoginAuth"; // Import the LoginAuth component
-
-const Navbar = () => {
+const Navbar = (props) => {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
 	const toggleMobileMenu = () => {
@@ -11,11 +10,15 @@ const Navbar = () => {
 	};
 
 	return (
-		<nav className="bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white p-4 shadow-lg w-full">
+		<nav
+			className="bg-gradient-to-r from-blue-600 via-blue-800 to-blue-950 text-white p-4 shadow-lg w-full transition-all duration-300
+"
+		>
 			<div className="flex justify-between items-center w-full">
-				{/* Brand Name */}
-				<Link to="/">
-					<div className="text-2xl font-bold tracking-wide">SARATHI</div>
+				{/* Brand Name or AI Icon */}
+				<Link to="/" className="flex items-center space-x-2">
+					<AiOutlineRobot className="text-3xl text-white" /> {/* AI Icon */}
+					<h1 className="text-2xl font-bold">Sarathi</h1>
 				</Link>
 
 				{/* Hamburger Menu Icon for Mobile */}
@@ -71,16 +74,37 @@ const Navbar = () => {
 						</Link>
 					</li>
 
-					{/* Use the LoginAuth component here */}
+					{/* Conditional rendering based on loggedIn and role (mentee/mentor) */}
 					<li>
-						<LoginAuth />
+						{!props.logedIn ? (
+							<Link
+								to="/login"
+								className="hover:text-gray-300 transition-colors duration-300"
+							>
+								Login
+							</Link>
+						) : props.menteeLogin ? (
+							<Link
+								to="/mentee-profile"
+								className="hover:text-gray-300 transition-colors duration-300"
+							>
+								Profile
+							</Link>
+						) : (
+							<Link
+								to="/mentor-profile"
+								className="hover:text-gray-300 transition-colors duration-300"
+							>
+								Profile
+							</Link>
+						)}
 					</li>
 				</ul>
 			</div>
 
 			{/* Fullscreen Mobile Menu */}
 			{isMobileMenuOpen && (
-				<div className="fixed inset-0 bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 text-white flex flex-col items-center justify-center z-50">
+				<div className="fixed inset-0 bg-gradient-to-r from-purple-700 via-blue-700 to-indigo-100 text-white flex flex-col items-center justify-center z-50">
 					<button
 						onClick={toggleMobileMenu}
 						className="absolute top-4 right-4 flex items-center gap-2 text-xl font-bold"
@@ -118,10 +142,14 @@ const Navbar = () => {
 								About
 							</Link>
 						</li>
-
-						{/* LoginAuth logic simplified */}
 						<li>
-							<LoginAuth isMobile={true} onCloseMenu={toggleMobileMenu} />
+							<Link
+								to="/login"
+								className="hover:text-gray-300 transition-colors duration-300"
+								onClick={toggleMobileMenu}
+							>
+								Login
+							</Link>
 						</li>
 					</ul>
 
