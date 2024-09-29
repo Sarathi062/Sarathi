@@ -28,17 +28,17 @@ function App() {
 	const [logedIn, setLogedIn] = useState(false);
 
 	// Check localStorage on component mount
-	// useEffect(() => {
-	// 	const storedMentorLogin = localStorage.getItem("mentorLogin") === "true";
-	// 	const storedMenteeLogin = localStorage.getItem("menteeLogin") === "true";
-	// 	const storedLoggedIn = localStorage.getItem("logedIn") === "true";
+	useEffect(() => {
+		const storedMentorLogin = localStorage.getItem("mentorLogin") === "true";
+		const storedMenteeLogin = localStorage.getItem("menteeLogin") === "true";
+		const storedLoggedIn = localStorage.getItem("logedIn") === "true";
 
-	// 	if (storedLoggedIn) {
-	// 		setLogedIn(true);
-	// 		setMentorLogin(storedMentorLogin);
-	// 		setMenteeLogin(storedMenteeLogin);
-	// 	}
-	// }, []);
+		if (storedLoggedIn) {
+			setLogedIn(true);
+			setMentorLogin(storedMentorLogin);
+			setMenteeLogin(storedMenteeLogin);
+		}
+	}, []);
 
 
 	// Move Router here to wrap the whole component
