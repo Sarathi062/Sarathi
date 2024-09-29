@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import MentorCardPage from "./components/MentorCardPage";
 import Home from "./components/Home";
 import Login from "./components/Login";
+import Login from "./components/Login";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import Mentors from "./components/Mentors";
