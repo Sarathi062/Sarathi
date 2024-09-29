@@ -45,7 +45,7 @@ const Login = (props) => {
 			if (!res.ok) {
 				throw new Error(data.error);
 			}
-			// console.log(data.token);
+			console.log(data);
 			// Store the token in localStorage
 			localStorage.setItem("token", data.token);
 			props.setLogedIn(true);
@@ -57,6 +57,16 @@ const Login = (props) => {
 			if (role === "mentor") {
 				props.setMentorLogin(true);
 			}
+
+			// Store the login state in localStorage
+			// localStorage.setItem("logedIn", "true");
+			// if (role === "mentor") {
+			// 	localStorage.setItem("mentorLogin", "true");
+			// 	localStorage.setItem("menteeLogin", "false");
+			// } else {
+			// 	localStorage.setItem("mentorLogin", "false");
+			// 	localStorage.setItem("menteeLogin", "true");
+			// }
 
 			navigate("/");
 		} catch (error) {

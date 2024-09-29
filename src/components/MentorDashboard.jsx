@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./MentorDashboard.css";
 import SessionCard from "./SessionCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
@@ -162,7 +161,6 @@ const MentorDashboard = () => {
 		}
 	};
 
-
 	const handleApproveRequest = async (requestId) => {
 		try {
 			const token = localStorage.getItem("token");
@@ -186,15 +184,17 @@ const MentorDashboard = () => {
 			console.error("Error approving session request:", error);
 			alert("Failed to approve session request. Please try again.");
 		}
-	}
+	};
 
 	return (
-		<div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
-			<h1 className="text-2xl font-bold">Mentor Dashboard</h1>
+		<div className="max-w-5xl mx-auto p-6 bg-gray-50 rounded-xl shadow-md">
+			<h1 className="text-2xl font-bold mb-6 text-black-100">
+				Mentor Dashboard
+			</h1>
 
 			{/* Create Session Button */}
 			<button
-				className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+				className="bg-gray-800 text-white py-2 mb-4 px-4 rounded-md hover:bg-gray-700 transition duration-200"
 				onClick={() => navigate("/create-session")}
 			>
 				Create Session
@@ -241,19 +241,20 @@ const MentorDashboard = () => {
 							style={{ border: 0 }}
 							width="100%"
 							height="400"
-							frameBorder="0"
-							scrolling="no"
 							title="User's Google Calendar"
 						></iframe>
 
 						<button
-							style={{ background: "green" }}
+							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-gray-800 transition duration-200"
 							onClick={openGoogleAuthPopup}
 						>
 							Authenticate
 						</button>
 
-						<button style={{ background: "red" }} onClick={addEvent}>
+						<button
+							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-blue-800 transition duration-200"
+							onClick={addEvent}
+						>
 							Add Event to calendar
 						</button>
 						{/* Search Bar */}
@@ -272,7 +273,7 @@ const MentorDashboard = () => {
 							<h2 className="text-xl font-bold mb-4">Created Sessions</h2>
 							{filteredSessions.length > 0 ? (
 								filteredSessions.map((session) => (
-									<SessionCard key={session._id} session={session} />
+									<SessionCard key={session.id} session={session} />
 								))
 							) : (
 								<p>No created sessions found</p>

@@ -21,7 +21,7 @@ export default function ProfileMentee(props) {
 			);
 
 			const data = await res.json();
-			console.log(data);
+			// console.log(data);
 			if (!res.ok) {
 				navigate("/login");
 			}
@@ -56,16 +56,17 @@ export default function ProfileMentee(props) {
 	};
 
 	const handleLogout = () => {
-		localStorage.removeItem("token");
+		localStorage.clear();
 		navigate("/");
 		props.setMenteeLogin(false);
-		props.setLogedIn(false);
+		// props.setLogedIn(false);
 		props.setlogin(false);
+		props.setLogedIn(false);
 	};
 
 	useEffect(() => {
 		fetchProfile();
-		console.log(profile);
+		// console.log(profile);
 	}, []);
 
 	return (
