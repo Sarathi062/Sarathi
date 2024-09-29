@@ -1,9 +1,10 @@
-import  { useState } from "react";
+import { useState,useEffect } from "react";
 import {
 	BrowserRouter as Router,
 	Route,
 	Routes,
 	Navigate,
+	useLocation,
 } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import MentorCardPage from "./components/MentorCardPage";
@@ -20,11 +21,27 @@ import ProfileMentor from "./components/ProfileMentor";
 import SessionForm from "./components/SessionForm";
 import CreateSession from "./components/CreateSession";
 import EditProfile from "./components/EditProfile";
+
 function App() {
 	const [mentorLogin, setMentorLogin] = useState(false);
 	const [menteeLogin, setMenteeLogin] = useState(false);
 	const [logedIn, setLogedIn] = useState(false);
 
+	// Check localStorage on component mount
+	// useEffect(() => {
+	// 	const storedMentorLogin = localStorage.getItem("mentorLogin") === "true";
+	// 	const storedMenteeLogin = localStorage.getItem("menteeLogin") === "true";
+	// 	const storedLoggedIn = localStorage.getItem("logedIn") === "true";
+
+	// 	if (storedLoggedIn) {
+	// 		setLogedIn(true);
+	// 		setMentorLogin(storedMentorLogin);
+	// 		setMenteeLogin(storedMenteeLogin);
+	// 	}
+	// }, []);
+
+
+	// Move Router here to wrap the whole component
 	return (
 		<Router>
 			{/* Navbar will be visible on all routes */}
@@ -34,6 +51,34 @@ function App() {
 				menteeLogin={menteeLogin}
 			/>
 			{/* Define your routes inside the Routes component */}
+			<Content
+				logedIn={logedIn}
+				mentorLogin={mentorLogin}
+				menteeLogin={menteeLogin}
+				setMentorLogin={setMentorLogin}
+				setMenteeLogin={setMenteeLogin}
+				setLogedIn={setLogedIn}
+			/>
+		</Router>
+	);
+}
+
+// Move useLocation and footer conditional logic into the Content component
+const Content = ({
+	logedIn,
+	mentorLogin,
+	menteeLogin,
+	setMentorLogin,
+	setMenteeLogin,
+	setLogedIn,
+}) => {
+	const location = useLocation();
+	// Define routes where the Footer should be displayed
+	const showFooterRoutes = ["/", "/about", "/mentors"];
+	const shouldShowFooter = showFooterRoutes.includes(location.pathname);
+
+	return (
+		<>
 			<Routes>
 				<Route
 					path="/"
@@ -136,14 +181,12 @@ function App() {
 				{logedIn && mentorLogin && (
 					<Route path="/edit-profile" element={<EditProfile />} />
 				)}
-				{/* Redirect based on login */}
-				{/* {logedIn && (
-          <Route path="*" element={<Navigate to={menteeLogin ? "/dashboard" : "/mentor-dashboard"} />} />
-        )} */}
 			</Routes>
-			<Footer />
-		</Router>
+
+			{/* Conditionally render Footer */}
+			{shouldShowFooter && <Footer />}
+		</>
 	);
-}
+};
 
 export default App;

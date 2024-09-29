@@ -41,7 +41,7 @@ const CreateSession = () => {
 			if (!res.ok) {
 				throw new Error(data.error || "Unknown error occurred");
 			} else {
-				console.log(data);
+				// console.log(data);
 				alert("Session created successfully");
 				navigate("/mentor-dashboard");
 			}

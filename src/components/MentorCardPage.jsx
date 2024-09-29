@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import MentorCard from "./MentorCard"; // Uncommented to import MentorCard
+import MentorCard from "./MentorCard";
 
 const MentorCardPage = () => {
 	const [showButton, setShowButton] = useState(false);
@@ -11,6 +11,7 @@ const MentorCardPage = () => {
 				"https://sarathi-backend-cgm8.onrender.com/get-mentor-profiles"
 			);
 			const data = await response.json();
+			console.log("data", data.mentors);
 			return data.mentors;
 		} catch (error) {
 			console.error("Error fetching mentors:", error);
@@ -20,6 +21,7 @@ const MentorCardPage = () => {
 	useEffect(() => {
 		const getMentors = async () => {
 			const mentorsFromServer = await fetchMentors();
+			// console.log("mentorsFromServer", mentorsFromServer);
 			setMentors(mentorsFromServer); // mentorsFromServer is an array of mentor objects
 		};
 
@@ -56,6 +58,7 @@ const MentorCardPage = () => {
 				{/* Mentor Cards */}
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 					{mentors.map((mentor) => (
+						// console.log('mentor', mentor);
 						<MentorCard key={mentor._id} mentor={mentor} />
 					))}
 				</div>

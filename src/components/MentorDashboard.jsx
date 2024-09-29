@@ -5,7 +5,7 @@ import SessionCard from "./SessionCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 const MentorDashboard = () => {
-	const [dashboardData, setDashboardData] = useState(null);
+	// const [dashboardData, setDashboardData] = useState(null);
 	const [sessionRequests, setSessionRequests] = useState([]);
 	const [createdSessions, setCreatedSessions] = useState([]);
 	const [loading, setLoading] = useState(true); // Loading state
@@ -31,7 +31,7 @@ const MentorDashboard = () => {
 			if (!res.ok) {
 				navigate("/login");
 			} else {
-				setDashboardData(data);
+				// setDashboardData(data);
 				setSessionRequests(data.sessionRequests || []);
 				setCreatedSessions(data.createdSessions || []);
 				setLoading(false); // Stop loading after data is fetched
@@ -161,6 +161,32 @@ const MentorDashboard = () => {
 			alert("Error adding event to calendar");
 		}
 	};
+
+	const handleApproveRequest = async (requestId) => {
+		try {
+			const token = localStorage.getItem("token");
+			const res = await fetch(
+				`https://sarathi-backend-cgm8.onrender.com/approve-request/${requestId}`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				}
+			);
+			const data = await res.json();
+			if (!res.ok) {
+				throw new Error(data.error || "Unknown error occurred");
+			} else {
+				alert("Session request approved successfully");
+				fetchDashboardData();
+			}
+		} catch (error) {
+			console.error("Error approving session request:", error);
+			alert("Failed to approve session request. Please try again.");
+		}
+	};
+
 	return (
 		<div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
 			<h1 className="text-2xl font-bold">Mentor Dashboard</h1>
@@ -214,8 +240,6 @@ const MentorDashboard = () => {
 							style={{ border: 0 }}
 							width="100%"
 							height="400"
-							frameBorder="0"
-							scrolling="no"
 							title="User's Google Calendar"
 						></iframe>
 
@@ -245,7 +269,7 @@ const MentorDashboard = () => {
 							<h2 className="text-xl font-bold mb-4">Created Sessions</h2>
 							{filteredSessions.length > 0 ? (
 								filteredSessions.map((session) => (
-									<SessionCard key={session._id} session={session} />
+									<SessionCard key={session.id} session={session} />
 								))
 							) : (
 								<p>No created sessions found</p>
