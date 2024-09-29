@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { Link } from "react-router-dom";
 import clock from "../assets/clock.svg";
 import hat from "../assets/hat.svg";
