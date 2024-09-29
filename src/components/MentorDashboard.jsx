@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./MentorDashboard.css";
 import SessionCard from "./SessionCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
@@ -188,12 +187,14 @@ const MentorDashboard = () => {
 	};
 
 	return (
-		<div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-md space-y-4">
-			<h1 className="text-2xl font-bold">Mentor Dashboard</h1>
+		<div className="max-w-5xl mx-auto p-6 bg-gray-50 rounded-xl shadow-md">
+			<h1 className="text-2xl font-bold mb-6 text-black-100">
+				Mentor Dashboard
+			</h1>
 
 			{/* Create Session Button */}
 			<button
-				className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600"
+				className="bg-gray-800 text-white py-2 mb-4 px-4 rounded-md hover:bg-gray-700 transition duration-200"
 				onClick={() => navigate("/create-session")}
 			>
 				Create Session
@@ -244,13 +245,16 @@ const MentorDashboard = () => {
 						></iframe>
 
 						<button
-							style={{ background: "green" }}
+							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-gray-800 transition duration-200"
 							onClick={openGoogleAuthPopup}
 						>
 							Authenticate
 						</button>
 
-						<button style={{ background: "red" }} onClick={addEvent}>
+						<button
+							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-blue-800 transition duration-200"
+							onClick={addEvent}
+						>
 							Add Event to calendar
 						</button>
 						{/* Search Bar */}

@@ -59,14 +59,14 @@ const Login = (props) => {
 			}
 
 			// Store the login state in localStorage
-			localStorage.setItem("logedIn", "true");
-			if (role === "mentor") {
-				localStorage.setItem("mentorLogin", "true");
-				localStorage.setItem("menteeLogin", "false");
-			} else {
-				localStorage.setItem("mentorLogin", "false");
-				localStorage.setItem("menteeLogin", "true");
-			}
+			// localStorage.setItem("logedIn", "true");
+			// if (role === "mentor") {
+			// 	localStorage.setItem("mentorLogin", "true");
+			// 	localStorage.setItem("menteeLogin", "false");
+			// } else {
+			// 	localStorage.setItem("mentorLogin", "false");
+			// 	localStorage.setItem("menteeLogin", "true");
+			// }
 
 			navigate("/");
 		} catch (error) {

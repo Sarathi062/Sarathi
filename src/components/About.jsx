@@ -23,7 +23,8 @@ const teamMembers = [
 	{
 		name: "Saurabh Rai",
 		role: "Admin & Support",
-		image: "https://via.placeholder.com/150",
+		image:
+			"https://instagram.fpnq7-4.fna.fbcdn.net/v/t51.2885-19/452915816_1913942749031386_3675500733707507407_n.jpg?_nc_ht=instagram.fpnq7-4.fna.fbcdn.net&_nc_cat=110&_nc_ohc=tvdXmtU5RnoQ7kNvgEqy9JJ&_nc_gid=41d79fcfb9f645be99716bffd1520eb2&edm=ALGbJPMBAAAA&ccb=7-5&oh=00_AYC2iKV27p6TJYrsztagf5Vr5Fi22trE3GytNQy9TBA6eQ&oe=66FF077B&_nc_sid=7d3ac5/150",
 		note: "Providing exceptional support and ensuring smooth operations.",
 	},
 	{
@@ -117,7 +118,7 @@ const AboutPage = () => {
 								<img
 									src={member.image}
 									alt={member.name}
-									className="rounded-full w-32 h-32 mb-4"
+									className="rounded-full w-32 h-32 mb-4 "
 								/>
 								<h3 className="text-xl font-semibold text-blue-800 text-center">
 									{member.name}

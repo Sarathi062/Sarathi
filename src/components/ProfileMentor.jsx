@@ -3,13 +3,12 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
 	const [profile, setProfile] = useState(null);
-	const [loading, setLoading] = useState(true); // Loading state
-	const [error, setError] = useState(null); // Error state
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
 	const navigate = useNavigate();
 
 	const fetchProfile = async () => {
 		const token = localStorage.getItem("token");
-		// console.log('token', token);
 
 		if (!token) {
 			navigate("/login");
@@ -44,43 +43,13 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
 		}
 	};
 
-	const loadDashboard = async () => {
-		const token = localStorage.getItem("token");
-		// console.log('token', token);
-		if (!token) {
-			navigate("/login");
-			return;
-		}
-
-		try {
-			const res = await fetch(
-				"https://sarathi-backend-cgm8.onrender.com/dashboard-mentor",
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-
-			if (!res.ok) {
-				navigate("/login");
-				return;
-			}
-
-			navigate("/mentor-dashboard");
-		} catch (error) {
-			console.error("Error loading dashboard:", error);
-		}
-	};
+	useEffect(() => {
+		fetchProfile();
+	}, []);
 
 	const handleEditProfile = () => {
 		navigate("/edit-profile");
 	};
-
-	useEffect(() => {
-		fetchProfile();
-	}, []);
 
 	const handleLogout = () => {
 		localStorage.clear();
@@ -90,83 +59,85 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
 	};
 
 	return (
-		<div className="p-8 h-screen bg-gray-900 text-white overflow-auto">
-			<h1 className="text-4xl font-bold mb-6">Mentor Profile</h1>
+		<div className="p-8 h-screen bg-gradient-to-b from-blue-900 via-purple-900 to-black text-white overflow-auto">
+			<h1 className="text-5xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 via-red-500 to-pink-500 bg-clip-text text-transparent">
+				Mentor Profile
+			</h1>
 
 			{loading ? (
-				<p className="text-center text-lg">Loading profile...</p>
+				<p className="text-center text-lg text-blue-400">Loading profile...</p>
 			) : error ? (
 				<p className="text-center text-lg text-red-500">Error: {error}</p>
 			) : profile ? (
-				<div className="bg-gray-800 p-6 rounded-lg shadow-md w-full max-w-4xl mx-auto">
-					<h2 className="text-3xl font-semibold mb-4">Personal Information</h2>
-					<div className="grid grid-cols-2 gap-4 mb-4">
+				<div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 p-6 rounded-lg shadow-md w-full max-w-4xl mx-auto border-2 border-purple-600">
+					<h2 className="text-3xl font-semibold mb-4 text-yellow-300">Personal Information</h2>
+					<div className="grid grid-cols-2 gap-4 mb-4 text-blue-200">
 						<p>
-							<strong>Name:</strong> {profile.firstName} {profile.lastName}
+							<strong className="text-yellow-300">Name:</strong> {profile.firstName} {profile.lastName}
 						</p>
 						<p>
-							<strong>Email:</strong> {profile.email}
+							<strong className="text-yellow-300">Email:</strong> {profile.email}
 						</p>
 						<p>
-							<strong>Job Title:</strong> {profile.jobTitle}
+							<strong className="text-yellow-300">Job Title:</strong> {profile.jobTitle}
 						</p>
 						<p>
-							<strong>Location:</strong> {profile.location}
+							<strong className="text-yellow-300">Location:</strong> {profile.location}
 						</p>
 						<p>
-							<strong>Languages:</strong> {profile.language}
+							<strong className="text-yellow-300">Languages:</strong> {profile.language}
 						</p>
 						<p>
-							<strong>LinkedIn:</strong>{" "}
+							<strong className="text-yellow-300">LinkedIn:</strong>{" "}
 							<a
 								href={profile.linkedin}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-blue-400 underline"
+								className="text-green-400 underline hover:text-green-300"
 							>
 								{profile.linkedin}
 							</a>
 						</p>
 					</div>
 
-					<h2 className="text-3xl font-semibold mb-4">Professional Details</h2>
-					<div className="grid grid-cols-2 gap-4 mb-4">
+					<h2 className="text-3xl font-semibold mb-4 text-yellow-300">Professional Details</h2>
+					<div className="grid grid-cols-2 gap-4 mb-4 text-blue-200">
 						<p>
-							<strong>Company:</strong> {profile.company}
+							<strong className="text-yellow-300">Company:</strong> {profile.company}
 						</p>
 						<p>
-							<strong>Role:</strong> {profile.role}
+							<strong className="text-yellow-300">Role:</strong> {profile.role}
 						</p>
 						<p>
-							<strong>Skills:</strong>{" "}
+							<strong className="text-yellow-300">Skills:</strong>{" "}
 							{profile.skills && profile.skills.join(", ")}
 						</p>
 						<p>
-							<strong>Description:</strong> {profile.description}
+							<strong className="text-yellow-300">Description:</strong> {profile.description}
 						</p>
 						<p>
-							<strong>Years of Experience:</strong> {profile.yearsOfExperience}
+							<strong className="text-yellow-300">Years of Experience:</strong> {profile.yearsOfExperience}
 						</p>
 					</div>
 
 					{/* Experience Section */}
 					{profile.experience && profile.experience.length > 0 && (
 						<div className="mb-6">
-							<h2 className="text-3xl font-semibold mb-2">Experience</h2>
-							<ul className="list-disc pl-5 space-y-3">
+							<h2 className="text-3xl font-semibold mb-2 text-yellow-300">Experience</h2>
+							<ul className="list-disc pl-5 space-y-3 text-blue-200">
 								{profile.experience.map((exp, index) => (
 									<li
 										key={index}
-										className="border border-gray-700 p-4 rounded-md"
+										className="border border-purple-700 p-4 rounded-md bg-gray-700"
 									>
 										<p>
-											<strong>Company:</strong> {exp.company}
+											<strong className="text-yellow-300">Company:</strong> {exp.company}
 										</p>
 										<p>
-											<strong>Duration:</strong> {exp.duration}
+											<strong className="text-yellow-300">Duration:</strong> {exp.duration}
 										</p>
 										<p>
-											<strong>Role:</strong> {exp.role}
+											<strong className="text-yellow-300">Role:</strong> {exp.role}
 										</p>
 									</li>
 								))}
@@ -177,20 +148,20 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
 					{/* Buttons for actions */}
 					<div className="mt-6 flex space-x-4 justify-center">
 						<button
-							onClick={loadDashboard}
-							className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-500 transition"
+							onClick={() => navigate("/mentor-dashboard")}
+							className="bg-gradient-to-r from-green-600 to-green-400 text-white px-6 py-2 rounded hover:from-green-500 hover:to-green-300 transition"
 						>
 							Go to Dashboard
 						</button>
 						<button
 							onClick={handleLogout}
-							className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition"
+							className="bg-gradient-to-r from-red-600 to-red-400 text-white px-6 py-2 rounded hover:from-red-500 hover:to-red-300 transition"
 						>
 							Logout
 						</button>
 						<button
 							onClick={handleEditProfile}
-							className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-500 transition"
+							className="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-2 rounded hover:from-blue-500 hover:to-blue-300 transition"
 						>
 							Edit Profile
 						</button>

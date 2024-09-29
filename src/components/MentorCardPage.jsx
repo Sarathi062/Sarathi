@@ -11,7 +11,6 @@ const MentorCardPage = () => {
 				"https://sarathi-backend-cgm8.onrender.com/get-mentor-profiles"
 			);
 			const data = await response.json();
-			console.log("data", data.mentors);
 			return data.mentors;
 		} catch (error) {
 			console.error("Error fetching mentors:", error);
@@ -21,31 +20,21 @@ const MentorCardPage = () => {
 	useEffect(() => {
 		const getMentors = async () => {
 			const mentorsFromServer = await fetchMentors();
-			// console.log("mentorsFromServer", mentorsFromServer);
-			setMentors(mentorsFromServer); // mentorsFromServer is an array of mentor objects
+			setMentors(mentorsFromServer || []); // Fallback to empty array if fetch fails
 		};
 
 		getMentors();
 
 		const handleScroll = () => {
-			if (window.pageYOffset > 300) {
-				setShowButton(true);
-			} else {
-				setShowButton(false);
-			}
+			setShowButton(window.pageYOffset > 300);
 		};
 
 		window.addEventListener("scroll", handleScroll);
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
+		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
 	const scrollToTop = () => {
-		window.scrollTo({
-			top: 0,
-			behavior: "smooth",
-		});
+		window.scrollTo({ top: 0, behavior: "smooth" });
 	};
 
 	return (
@@ -56,11 +45,16 @@ const MentorCardPage = () => {
 				</h1>
 
 				{/* Mentor Cards */}
-				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-					{mentors.map((mentor) => (
-						// console.log('mentor', mentor);
-						<MentorCard key={mentor._id} mentor={mentor} />
-					))}
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+					{mentors.length > 0 ? (
+						mentors.map((mentor) => (
+							<MentorCard key={mentor._id} mentor={mentor} />
+						))
+					) : (
+						<p className="col-span-full text-center text-gray-600">
+							No mentors available.
+						</p>
+					)}
 				</div>
 
 				{/* Back to Top Button */}
