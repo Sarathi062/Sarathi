@@ -23,8 +23,7 @@ const Login = (props) => {
     e.preventDefault();
     const { email, password, role } = formData;
 
-    // Determine endpoint based on role selection
-    const endpoint = role === "mentor" ? "login" : "login-Mentee";
+    const endpoint = role === "mentor" ? "login-Mentor" : "login-Mentee";
 
     try {
       const res = await fetch(`http://localhost:3001/${endpoint}`, {
@@ -42,17 +41,20 @@ const Login = (props) => {
       if (!res.ok) {
         throw new Error(data.error);
       }
-      // console.log(data.token);
       // Store the token in localStorage
       localStorage.setItem("token", data.token);
-      props.setLogedIn(true);
+      
       setError("Login Successful");
 
       if (role === "mentee") {
+        props.setLogedIn(true);
         props.setMenteeLogin(true);
+        localStorage.setItem("role", "mentee");
       }
       if (role === "mentor") {
+        props.setLogedIn(true);
         props.setMentorLogin(true);
+        localStorage.setItem("role", "mentor");
       }
 
       navigate("/");
@@ -62,8 +64,8 @@ const Login = (props) => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 sm:px-0">
-      <div className="bg-white shadow-lg md:rounded-3xl p-6 sm:p-10 lg:p-16 max-w-sm sm:max-w-md lg:max-w-lg w-full">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-grey-400 to-grey-500 sm:px-0 min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="bg-white md:rounded-3xl p-6 sm:p-10 lg:p-16 max-w-sm sm:max-w-md lg:max-w-lg w-full min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8" >
         {/* Title */}
         <h2 className="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-6 sm:mb-8">
           Welcome Back!

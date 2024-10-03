@@ -6,10 +6,10 @@ import nodemailer from 'nodemailer';
 // import { google } from 'googleapis';
 
 const OTPs = {};
-const SECRET_KEY = 'yashraj'; // Keep this key secure
+const SECRET_KEY = process.env.SECRET_KEY; // Keep this key secure
 
 // Function to handle login
-export const login = async (req, res) => {
+export const loginMentor = async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -26,7 +26,8 @@ export const login = async (req, res) => {
         }
 
         // Create a token
-        const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY, { expiresIn: '1hr' });
+        const token = jwt.sign({ id: user._id, email: user.email }, SECRET_KEY);
+        
         res.status(200).json({ message: "Login successful", token, user });
 
     } catch (error) {

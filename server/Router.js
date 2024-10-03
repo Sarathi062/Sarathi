@@ -1,10 +1,10 @@
 import express from 'express';
-import { login,loginMentee, registerMentor,registerMentee, sendOTP, verifyOTP} from './authController.js';
+import { loginMentor,loginMentee, registerMentor,registerMentee, sendOTP, verifyOTP} from './authController.js';
 import { authenticateToken, getProfileMentee, getProfileMentor, getDashboardMentor, getEditMentor, getDashboardMentee ,registersession,createSession,getSession,getMentors ,getSessiondetails,auth,callback,addevent,getUserCalendar} from './profileController.js';
 
 const router = express.Router();
 
-router.route('/login').post(login);
+router.route('/login-Mentor').post(loginMentor);
 router.route('/login-Mentee').post(loginMentee);
 router.route('/register-mentor').post(registerMentor);
 router.route('/register-mentee').post(registerMentee);

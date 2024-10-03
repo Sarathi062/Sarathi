@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema({
         // required: true
     },
     language:{
-        type: String,
+        type: [String],
     },
     description: {
         type: String,
@@ -58,6 +58,9 @@ const UserSchema = new mongoose.Schema({
     },
     refresh_token: {
         type: String,
+    },
+    authenticated: {
+        type: Boolean,
     },
     
 });

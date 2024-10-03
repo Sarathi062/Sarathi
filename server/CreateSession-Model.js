@@ -3,43 +3,37 @@ import mongoose from "mongoose";
 const CreateSessionSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
-        required: true
+        required: true,
     },
-    date: {
-        type: String,
-        required: true
+    start: {
+        type: Date, // Changed from String to Date for ISO format
+        required: true,
     },
-    timeFrom: {
-        type: String,
-        required: true
+    end: {
+        type: Date, // Changed from String to Date for ISO format
+        required: true,
     },
-    timeTo: {
-        type: String,
-        required: true
-    },
-    
     price: {
         type: Number,
-        required: true
+        required: true,
     },
     mentorID: {
         type: String,
-        // required: true
+        // required: true // Uncomment if necessary
     },
     type: {
         type: String,
-        required: true
+        required: true,
     },
     menteesID: {
         type: [String],
-        // required: true
-    }
-
-}); 
+        // required: true // Uncomment if necessary
+    },
+});
 
 const CreatedSession = mongoose.model("CreatedSession", CreateSessionSchema);
 

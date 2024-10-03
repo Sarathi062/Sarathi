@@ -6,7 +6,7 @@ const MentorCard = ({ mentor }) => {
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate(`/Mentors/${mentor._id}`);
+    navigate(`/mentorInfo/${mentor._id}`);
   };
 
   // Function to calculate total experience duration
@@ -83,7 +83,7 @@ const MentorCard = ({ mentor }) => {
           className="bg-blue-500 text-white font-bold py-2 px-6 rounded-full hover:bg-blue-600 transition-colors duration-300"
           onClick={onClick}
         >
-          Connect
+          Know More
         </button>
       </div>
     </div>

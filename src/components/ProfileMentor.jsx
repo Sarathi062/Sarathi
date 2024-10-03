@@ -1,8 +1,9 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
   const [profile, setProfile] = useState(null);
+
   const navigate = useNavigate();
 
   const fetchProfile = async () => {
@@ -25,101 +26,154 @@ const ProfileMentor = ({ setMentorLogin, setLogedIn }) => {
       window.alert(`Error: ${error.message}`);
     }
   };
-  const loadDashboard = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await fetch("http://localhost:3001/dashboard-mentor", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        navigate("/login");
-      }
 
-      navigate("/mentor-dashboard");
-    } catch (error) {
-      console.error("Error loading dashboard:", error);
-    }
-  };
   const handleEditProfile = () => {
     navigate("/edit-profile");
+  };
+
+  function openGoogleAuthPopup() {
+    fetch("http://localhost:3001/auth")
+      .then((response) => response.json())
+      .then((data) => {
+        const authUrl = data.url;
+        const popup = window.open(
+          authUrl,
+          "googleAuthPopup",
+          "width=500,height=600"
+        );
+
+        const handleAuthMessage = (event) => {
+          if (event.data.success) {
+            if (popup && !popup.closed) {
+              popup.close();
+            }
+            setTimeout(() => {
+              navigate("/mentor-dashboard");
+            }, 100);
+          }
+        };
+
+        window.addEventListener("message", handleAuthMessage, { once: true });
+      })
+      .catch((error) => {
+        console.error("Error fetching OAuth URL:", error);
+      });
   }
+
   useEffect(() => {
     fetchProfile();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setMentorLogin(false);
-    setLogedIn(false);
-    navigate("/");
-  };
-
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded-xl shadow-md space-y-4">
-      <h1 className="text-2xl font-bold">Mentor Profile</h1>
-      {profile ? (
-        <div>
-          <p>
-            <strong>Name:</strong> {profile.firstName} {profile.lastName}
-          </p>
-          <p>
-            <strong>Email:</strong> {profile.email}
-          </p>
+    <div className="flex flex-col min-h-screen bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 p-6">
+      {/* Running note */}
 
-          <p>
-            <strong>Years of Experience:</strong> {profile.yearsOfExperience}
-          </p>
+      {/* Main content wrapper */}
+      <div className="max-w-4xl w-full mx-auto bg-white rounded-xl shadow-lg p-8">
+        <h1 className="text-4xl font-extrabold text-blue-800 text-center mb-6">
+          Mentor Profile
+        </h1>
 
-          {/* Render experience section */}
-          {profile.experience && profile.experience.length > 0 && (
-            <div>
-              <h2 className="text-xl font-semibold mt-4">Experience</h2>
-              <ul className="list-disc pl-5">
-                {profile.experience.map((exp, index) => (
-                  <li key={index} className="mt-2">
-                    <p>
-                      <strong>Company:</strong> {exp.company}
-                    </p>
-                    <p>
-                      <strong>Duration:</strong> {exp.duration}
-                    </p>
-                    <p>
-                      <strong>Role:</strong> {exp.role}
-                    </p>
-                  </li>
-                ))}
+        {profile ? (
+          <div className="space-y-8">
+            {/* Profile Info */}
+            <div className="bg-blue-50 p-6 rounded-lg shadow-sm">
+              <p className="text-xl">
+                <strong className="font-semibold text-blue-800">Name:</strong>{" "}
+                {profile.firstName} {profile.lastName}
+              </p>
+              <p className="text-xl mt-2">
+                <strong className="font-semibold text-blue-800">Email:</strong>{" "}
+                {profile.email}
+              </p>
+              <p className="text-xl mt-2">
+                <strong className="font-semibold text-blue-800">
+                  Mentorship Areas:
+                </strong>{" "}
+                Design, Product Management
+              </p>
+            </div>
+
+            {/* Mentorship Insights */}
+            <div className="bg-gradient-to-r from-blue-50 via-blue-100 to-blue-200 p-6 rounded-lg shadow-lg">
+              <h2 className="text-2xl font-semibold text-blue-800">
+                Mentorship Insights
+              </h2>
+              <ul className="list-disc ml-6 text-gray-800 mt-3 space-y-1">
+                <li className="text-lg">
+                  <strong>Hours Mentored:</strong> 2 hrs
+                </li>
+                <li className="text-lg">
+                  <strong>Mentee Satisfaction:</strong> 2.3 / 5
+                </li>
+                <li className="text-lg">
+                  <strong>Impact:</strong> 34% mentees improved in XYZ areas
+                </li>
               </ul>
             </div>
-          )}
 
-          <div className="mt-4 flex space-x-4">
-            <button
-              onClick={loadDashboard}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-            >
-              Go to Dashboard
-            </button>
-            <button
-              onClick={handleLogout}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
-            <button
-              onClick={handleEditProfile}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 transition"
-            >
-              Edit Profile
-            </button>
+            {/* Mentor action buttons */}
+            <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-4 sm:space-y-0">
+              <button
+                onClick={handleEditProfile}
+                className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white text-lg px-6 py-3 rounded-lg shadow-md transition duration-300"
+              >
+                Edit Profile
+              </button>
+
+              {!profile.authenticated && (
+                <button
+                  onClick={openGoogleAuthPopup}
+                  className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white text-lg px-6 py-3 rounded-lg shadow-md transition duration-300"
+                >
+                  Authenticate Profile
+                </button>
+              )}
+            </div>
+
+            {/* Helpful Resources */}
+            <div className="bg-blue-50 p-6 rounded-lg shadow-sm mt-8">
+              <h2 className="text-2xl font-semibold text-blue-800">
+                Helpful Resources for Mentors
+              </h2>
+              <ul className="list-disc ml-6 text-gray-800 mt-3 space-y-2">
+                <li>
+                  <a
+                    href="https://link.to/mentorship-tips"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Effective Mentoring Tips
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://link.to/mental-health"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    Managing Stress as a Mentor
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://link.to/gamification"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    How Gamification Boosts Engagement
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      ) : (
-        <p>Loading profile...</p>
-      )}
+        ) : (
+          <p className="text-center text-gray-500 text-xl">Loading profile...</p>
+        )}
+      </div>
     </div>
   );
 };

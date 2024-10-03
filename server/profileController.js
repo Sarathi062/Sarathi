@@ -29,7 +29,7 @@ const auth = async (req, res) => {
         );
 
         const scopes = ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/calendar.readonly',
-            'https://www.googleapis.com/auth/calendar.events.readonly',];
+            'https://www.googleapis.com/auth/calendar.events.readonly' ,'https://www.googleapis.com/auth/calendar.readonly',];
         const url = oauth2Client.generateAuthUrl({
             access_type: 'offline',
             scope: scopes,
@@ -67,6 +67,7 @@ const callback = async (req, res) => {
         //save the access token and refresh token to the database
         user.access_token = tokens.access_token;
         user.refresh_token = tokens.refresh_token;
+        user.authenticated = true;
         await user.save();
 
         res.send(`
@@ -121,15 +122,15 @@ const addevent = async (req, res) => {
 
         const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
         const event = {
-            summary: 'Project Discussion with Mentor',
-            description: 'Discuss the project progress and next steps with the mentor.',
+            summary: 'Introduction To Calculus',
+            description: 'This is a session to introduce the basics of calculus',
             location: 'Google Meet',  // You can add a physical location if necessary
             start: {
-                dateTime: '2024-09-01T10:00:00',  // ISO format
+                dateTime: '2024-09-30T10:00:00',  // ISO format
                 timeZone: 'America/Los_Angeles',
             },
             end: {
-                dateTime: '2024-09-01T11:00:00',  // End time should be after the start time
+                dateTime: '2024-09-30T11:00:00',  // End time should be after the start time
                 timeZone: 'America/Los_Angeles',
             },
             conferenceData: {
@@ -277,10 +278,10 @@ const getEditMentor = async (req, res) => {
 };
 const createSession = async (req, res) => {
     try {
-        const { title, description, date, timeFrom, timeTo, price, type } = req.body;
+        const { title, description, start, end, price, type } = req.body;
 
         // Validate required fields
-        if (!title || !description || !date || !timeFrom || !timeTo || !price || !type) {
+        if (!title || !description || !start || !end || !price || !type) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
@@ -288,9 +289,8 @@ const createSession = async (req, res) => {
         const newSession = new CreatedSession({
             title,
             description,
-            date,
-            timeFrom,
-            timeTo,
+            start, // Use the ISO date directly
+            end,   // Use the ISO date directly
             price,
             type,
             mentorID: req.user.id // Ensure req.user.id is set properly
@@ -305,21 +305,24 @@ const createSession = async (req, res) => {
         res.status(500).json({ error: "Error occurred while creating the session" });
     }
 };
+
 const getSession = async (req, res) => {
     try {
         const mentorID = req.headers.mentorid; // Extract mentorID from headers
 
         if (!mentorID) {
+            console.log("mentorID is required in headers");
             return res.status(400).json({ error: "mentorID is required in headers" });
         }
 
         const sessions = await CreatedSession.find({ mentorID });
         res.status(200).json({ sessions });
     } catch (error) {
-        console.error(error); // Log the error for debugging
+        console.error("Error fetching sessions:", error); // Log the error for debugging
         res.status(500).json({ error: "Error fetching sessions" });
     }
 };
+
 
 const getSessiondetails = async (req, res) => {
     try {
