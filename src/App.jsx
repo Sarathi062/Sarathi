@@ -21,6 +21,7 @@ import ProfileMentor from "./components/ProfileMentor";
 import SessionForm from "./components/SessionForm";
 import CreateSession from "./components/CreateSession";
 import EditProfile from "./components/EditProfile";
+// import Aimentor from "./components/AImentor";
 
 function App() {
 	const [mentorLogin, setMentorLogin] = useState(false);
@@ -181,6 +182,10 @@ const Content = ({
 				{logedIn && mentorLogin && (
 					<Route path="/edit-profile" element={<EditProfile />} />
 				)}
+				{/* <Route
+					path="/aimentor"
+					element={menteeLogin ? <Aimentor /> : <Navigate to="/login" />}
+				/> */}
 			</Routes>
 
 			{/* Conditionally render Footer */}

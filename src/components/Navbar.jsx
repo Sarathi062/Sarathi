@@ -11,7 +11,7 @@ const Navbar = (props) => {
 
 	return (
 		<nav
-			className="bg-gradient-to-r from-blue-600 via-blue-800 to-blue-950 text-white p-4 shadow-lg w-full transition-all duration-300
+			className="bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400 text-white p-4 shadow-lg w-full transition-all duration-300
 "
 		>
 			<div className="flex justify-between items-center w-full">
