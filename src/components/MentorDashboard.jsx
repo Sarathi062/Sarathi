@@ -1,289 +1,249 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SessionCard from "./SessionCard.jsx";
 import LoadingSpinner from "./LoadingSpinner.jsx";
 
 const MentorDashboard = () => {
-	// const [dashboardData, setDashboardData] = useState(null);
-	const [sessionRequests, setSessionRequests] = useState([]);
-	const [createdSessions, setCreatedSessions] = useState([]);
-	const [loading, setLoading] = useState(true); // Loading state
-	const [error, setError] = useState(null);
-	const [searchQuery, setSearchQuery] = useState("");
-	const navigate = useNavigate();
-	const [calendarId, setCalendarId] = useState(null);
+  const [createdSessions, setCreatedSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [calendarId, setCalendarId] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const navigate = useNavigate();
 
-	const fetchDashboardData = async () => {
-		try {
-			const token = localStorage.getItem("token");
-			const res = await fetch(
-				"https://sarathi-backend-cgm8.onrender.com/dashboard-mentor",
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
+  // Helper function to handle token fetching and validation
+  const getToken = () => localStorage.getItem("token");
 
-			const data = await res.json();
-			if (!res.ok) {
-				navigate("/login");
-			} else {
-				// setDashboardData(data);
-				setSessionRequests(data.sessionRequests || []);
-				setCreatedSessions(data.createdSessions || []);
-				setLoading(false); // Stop loading after data is fetched
-			}
-		} catch (error) {
-			setError("Failed to load dashboard data.", error);
-			setLoading(false);
-		}
-	};
+  // Fetch Profile Data
+  const fetchProfile = async () => {
+    try {
+      const token = getToken();
+      if (!token) {
+        navigate("/login");
+        return;
+      }
 
-	const fetchCreatedSessions = async () => {
-		const token = localStorage.getItem("token");
-		try {
-			const res = await fetch(
-				"https://sarathi-backend-cgm8.onrender.com/get-session-mentor",
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
+      const res = await fetch("https://sarathi-backend-cgm8.onrender.com/profile-mentor", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-			const data = await res.json();
-			if (!res.ok) {
-				throw new Error(data.error || "Unknown error occurred");
-			} else {
-				setCreatedSessions(data.sessions);
-			}
-		} catch (error) {
-			setError("Error fetching created sessions.", error);
-		}
-	};
-	const fetchUserCalendar = async () => {
-		const token = localStorage.getItem("token");
-		try {
-			const res = await fetch(
-				"https://sarathi-backend-cgm8.onrender.com/user/calendar",
-				{
-					method: "GET",
-					headers: {
-						Authorization: `Bearer ${token}`,
-						"Content-Type": "application/json",
-					},
-				}
-			);
-			if (!res.ok) {
-				throw new Error("Error fetching user calendar.");
-			}
-			const data = await res.json();
-			setCalendarId(data.calendarId);
-		} catch (error) {
-			setError("", error);
-		}
-	};
-	useEffect(() => {
-		fetchDashboardData();
-		fetchCreatedSessions();
-		fetchUserCalendar();
-	}, []);
-	function openGoogleAuthPopup() {
-		// Call your back-end to get the OAuth URL
-		fetch("https://sarathi-backend-cgm8.onrender.com/auth")
-			.then((response) => response.json())
-			.then((data) => {
-				const authUrl = data.url;
+      const data = await res.json();
+      if (!res.ok) {
+        navigate("/login");
+        return;
+      }
 
-				// Open the URL in a popup
-				const popup = window.open(
-					authUrl,
-					"googleAuthPopup",
-					"width=500,height=600"
-				);
+      setProfile(data.profile);
+    } catch (error) {
+      window.alert(`Error: ${error.message}`);
+    }
+  };
 
-				// Listen for the message from the popup (authentication success)
-				const handleAuthMessage = (event) => {
-					if (event.data.success) {
-						// Close the popup
-						if (popup && !popup.closed) {
-							popup.close();
-						}
+  // Fetch Mentor Dashboard and Session Data
+  const fetchDashboardAndSessions = async () => {
+    try {
+      setLoading(true);
+      const token = getToken();
+      if (!token) throw new Error("Unauthorized access");
 
-						// Navigate to the dashboard after a brief delay
-						setTimeout(() => {
-							navigate("/mentor-dashboard");
-						}, 100); // Adjust the timeout as necessary
-					}
-				};
+      // Fetch dashboard data and session details concurrently
+      const [dashboardRes, sessionRes, calendarRes] = await Promise.all([
+        fetch("https://sarathi-backend-cgm8.onrender.com/dashboard-mentor", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        fetch("https://sarathi-backend-cgm8.onrender.com/get-session", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            mentorid: JSON.parse(atob(token.split(".")[1])).id,
+          },
+        }),
+        fetch("https://sarathi-backend-cgm8.onrender.com/user/calendar", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }),
+      ]);
 
-				window.addEventListener("message", handleAuthMessage, { once: true }); // Listen once
-			})
-			.catch((error) => {
-				console.error("Error fetching OAuth URL:", error);
-			});
-	}
-	const handleSearch = (e) => {
-		setSearchQuery(e.target.value);
-	};
+      if (!dashboardRes.ok) {
+        throw new Error("Error fetching dashboard data");
+      }
 
-	const filteredSessions = createdSessions.filter((session) =>
-		session.title.toLowerCase().includes(searchQuery.toLowerCase())
-	);
+      if (!sessionRes.ok) {
+        throw new Error("Error fetching session details");
+      }
 
-	const addEvent = async () => {
-		const res = await fetch(
-			"https://sarathi-backend-cgm8.onrender.com/add-event",
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${localStorage.getItem("token")}`,
-				},
-				body: JSON.stringify({
-					title: "Event Title",
-					description: "Event Description",
-					start: "2024-09-01T10:00:00",
-					end: "2024-09-01T11:00:00",
-				}),
-			}
-		);
-		const data = await res.json();
-		console.log(data);
-		if (res.ok) {
-			alert("Event added to calendar");
-		} else {
-			alert("Error adding event to calendar");
-		}
-	};
+      if (!calendarRes.ok) {
+        throw new Error("Error fetching user calendar");
+      }
 
-	const handleApproveRequest = async (requestId) => {
-		try {
-			const token = localStorage.getItem("token");
-			const res = await fetch(
-				`https://sarathi-backend-cgm8.onrender.com/approve-request/${requestId}`,
-				{
-					method: "POST",
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				}
-			);
-			const data = await res.json();
-			if (!res.ok) {
-				throw new Error(data.error || "Unknown error occurred");
-			} else {
-				alert("Session request approved successfully");
-				fetchDashboardData();
-			}
-		} catch (error) {
-			console.error("Error approving session request:", error);
-			alert("Failed to approve session request. Please try again.");
-		}
-	};
+      // Parse the responses
+      const dashboardData = await dashboardRes.json();
+      const sessionData = await sessionRes.json();
+      const calendarData = await calendarRes.json();
 
-	return (
-		<div className="max-w-5xl mx-auto p-6 bg-gray-50 rounded-xl shadow-md">
-			<h1 className="text-2xl font-bold mb-6 text-black-100">
-				Mentor Dashboard
-			</h1>
+      // Update state with data
+      setCreatedSessions(sessionData.sessions || []);
+      setCalendarId(calendarData.calendarId);
+      setLoading(false);
+    } catch (error) {
+      setError(error.message || "Failed to load dashboard data");
+      setLoading(false);
+    }
+  };
 
-			{/* Create Session Button */}
-			<button
-				className="bg-gray-800 text-white py-2 mb-4 px-4 rounded-md hover:bg-gray-700 transition duration-200"
-				onClick={() => navigate("/create-session")}
-			>
-				Create Session
-			</button>
+  useEffect(() => {
+    // Fetch the profile first, then fetch dashboard data and sessions
+    const loadData = async () => {
+      await fetchProfile();
+    };
 
-			{/* Error handling */}
-			{error && <p className="text-red-500">{error}</p>}
+    loadData();
+  }, []);
 
-			{/* Loading state */}
-			{loading ? (
-				<LoadingSpinner /> // Custom spinner component
-			) : (
-				<div className="flex flex-row space-x-4">
-					{/* Left column - Session Requests */}
-					<div className="w-1/2 bg-gray-100 p-4 rounded-md">
-						<h2 className="text-xl font-bold mb-4">Session Requests</h2>
-						{sessionRequests.length > 0 ? (
-							<ul>
-								{sessionRequests.map((request, index) => (
-									<li key={index} className="mb-4">
-										<div className="flex justify-between">
-											<span>
-												{request.menteeName} - {request.sessionTime}
-											</span>
-											<button
-												onClick={() => handleApproveRequest(request.id)}
-												className="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600"
-											>
-												Approve
-											</button>
-										</div>
-									</li>
-								))}
-							</ul>
-						) : (
-							<p>No pending session requests</p>
-						)}
-					</div>
+  useEffect(() => {
+    // Ensure profile is fully loaded before making other API calls
+    if (profile && profile.authenticated) {
+      fetchDashboardAndSessions();
+    } else if (profile && !profile.authenticated) {
+      navigate("/mentor-profile");
+    }
+  }, [profile]);
 
-					{/* Right column - Created Sessions */}
-					<div className="w-1/2">
-						<iframe
-							src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=America/Los_Angeles`}
-							style={{ border: 0 }}
-							width="100%"
-							height="400"
-							title="User's Google Calendar"
-						></iframe>
+  // Search functionality for filtering sessions
+  const handleSearch = (e) => setSearchQuery(e.target.value);
 
-						<button
-							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-gray-800 transition duration-200"
-							onClick={openGoogleAuthPopup}
-						>
-							Authenticate
-						</button>
+  const filteredSessions = createdSessions.filter((session) =>
+    session.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-						<button
-							className="bg-blue-600 text-white py-2 m-4 px-4 rounded-md hover:bg-blue-800 transition duration-200"
-							onClick={addEvent}
-						>
-							Add Event to calendar
-						</button>
-						{/* Search Bar */}
-						<div className="mt-4">
-							<input
-								type="text"
-								value={searchQuery}
-								onChange={handleSearch}
-								placeholder="Search sessions..."
-								className="w-full p-2 border border-gray-300 rounded-md mb-4"
-							/>
-						</div>
+  // Add a new event to the calendar
+  const addEvent = async (session) => {
+    try {
+      const token = getToken();
+      if (!token) throw new Error("Unauthorized access");
+      
+      // Prepare the event details using session information
+      const eventDetails = {
+        title: session.title, // Use the current session's title
+        description: session.description || "No description provided",
+        start: {
+          dateTime: session.start, // Ensure this is in ISO format
+          timeZone: "Asia/Kolkata", // Adjust based on your timezone
+        },
+        end: {
+          dateTime: session.end, // Ensure this is in ISO format
+          timeZone: "Asia/Kolkata", // Adjust based on your timezone
+        },
+      };
+      const res = await fetch("https://sarathi-backend-cgm8.onrender.com/add-event", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(eventDetails),
+      });
+      
+      console.log(res.hangoutLink);
+      if (!res.ok) {
+        throw new Error("Error adding event to calendar");
+      }
 
-						{/* Session Cards */}
-						<div className="mt-4">
-							<h2 className="text-xl font-bold mb-4">Created Sessions</h2>
-							{filteredSessions.length > 0 ? (
-								filteredSessions.map((session) => (
-									<SessionCard key={session.id} session={session} />
-								))
-							) : (
-								<p>No created sessions found</p>
-							)}
-						</div>
-					</div>
-				</div>
-			)}
-		</div>
-	);
+      const responseData = await res.json();
+      alert(responseData.message || "Event added to calendar");
+    } catch (error) {
+      alert(error.message || "Failed to add event");
+    }
+  };
+
+  // Iterate over each filtered session and call addEvent
+  const addEventsForFilteredSessions = async () => {
+    for (const session of filteredSessions) {
+      await addEvent(session); // Await here to ensure each event is added sequentially
+    }
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-50 p-8">
+      {/* Running Note */}
+      <div className="w-full bg-blue-100 text-blue-900 p-4 rounded-md shadow-lg text-center font-semibold">
+        All sessions automatically generate a Google Meet link, which is sent to
+        mentees. You have full access, and everything is ready for you to join
+        the meet!
+      </div>
+      <div className="w-full flex bg-white rounded-xl shadow-lg p-8 space-x-6 h-[90vh]">
+        <div className="w-1/2 h-full pr-4">
+          {error && <p className="text-red-500 text-center">{error}</p>}
+          <h1 className="text-3xl font-bold text-center mb-6">
+            Mentor Dashboard
+          </h1>
+          <div className="flex justify-center space-x-4 mb-6">
+            <button
+              className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition"
+              onClick={() => navigate("/create-session")}
+            >
+              Create Session
+            </button>
+            <button
+              className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition"
+              onClick={addEventsForFilteredSessions}
+            >
+              Add Event to Calendar
+            </button>
+          </div>
+          {calendarId ? (
+            <iframe
+              src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=Asia%2FKolkata`}
+              style={{ border: 0 }}
+              width="100%"
+              height="80%"
+              frameBorder="0"
+              scrolling="no"
+              title="User's Google Calendar"
+              className="rounded-lg shadow-md"
+            ></iframe>
+          ) : (
+            <p className="text-gray-600">Loading calendar...</p>
+          )}
+        </div>
+        <div className="w-1/2 h-full flex flex-col">
+          {createdSessions && (
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearch}
+              placeholder="Search sessions..."
+              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+            />
+          )}
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <div className="flex flex-col space-y-6 h-full overflow-auto">
+              <h2 className="text-xl font-semibold mb-4">Created Sessions</h2>
+              <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+                {filteredSessions.length > 0 ? (
+                  filteredSessions.map((session) => (
+                    <SessionCard key={session._id} session={session} />
+                  ))
+                ) : (
+                  <p>No created sessions found</p>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default MentorDashboard;
