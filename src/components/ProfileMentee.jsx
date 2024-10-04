@@ -21,7 +21,7 @@ export default function ProfileMentee(props) {
 			);
 
 			const data = await res.json();
-			// console.log(data);
+			console.log(data);
 			if (!res.ok) {
 				navigate("/login");
 			}
@@ -44,7 +44,7 @@ export default function ProfileMentee(props) {
 					},
 				}
 			);
-			// const data = await res.json();
+			const data = await res.json();
 			if (!res.ok) {
 				navigate("/login");
 			}
@@ -56,17 +56,16 @@ export default function ProfileMentee(props) {
 	};
 
 	const handleLogout = () => {
-		localStorage.clear();
+		localStorage.removeItem("token");
 		navigate("/");
 		props.setMenteeLogin(false);
-		// props.setLogedIn(false);
-		props.setlogin(false);
 		props.setLogedIn(false);
+		props.setlogin(false);
 	};
 
 	useEffect(() => {
 		fetchProfile();
-		// console.log(profile);
+		console.log(profile);
 	}, []);
 
 	return (

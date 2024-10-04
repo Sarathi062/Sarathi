@@ -1,19 +1,18 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./CreateSession.css";
 
 const CreateSession = () => {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
-		date: "",
-		timeFrom: "",
-		timeTo: "",
+		start: "",
+		end: "",
 		price: "",
-		type: "one-to-one",
+		type: "one-to-one", // Default value
 	});
 	const navigate = useNavigate();
 
+	// Handle input changes
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		setFormData({
@@ -22,6 +21,7 @@ const CreateSession = () => {
 		});
 	};
 
+	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const token = localStorage.getItem("token");
@@ -41,7 +41,6 @@ const CreateSession = () => {
 			if (!res.ok) {
 				throw new Error(data.error || "Unknown error occurred");
 			} else {
-				// console.log(data);
 				alert("Session created successfully");
 				navigate("/mentor-dashboard");
 			}
@@ -52,83 +51,107 @@ const CreateSession = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="form-container">
-			<h1 className="form-title">Create a Session</h1>
-			<div className="form-group">
-				<label className="form-label">Title</label>
-				<input
-					type="text"
-					name="title"
-					value={formData.title}
-					onChange={handleChange}
-					className="form-input"
-				/>
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-100 via-blue-200 to-blue-300 p-6 ">
+			<div className="w-full max-w-2xl  bg-gray-50  rounded-xl  p-8 space-y-6">
+				<h1 className="text-3xl font-bold text-center text-blue-700">
+					Create a Session
+				</h1>
+
+				<form onSubmit={handleSubmit} className="space-y-6">
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							Title
+						</label>
+						<input
+							type="text"
+							name="title"
+							value={formData.title}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						/>
+					</div>
+
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							Description
+						</label>
+						<textarea
+							name="description"
+							value={formData.description}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						/>
+					</div>
+
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							Start Time
+						</label>
+						<input
+							type="datetime-local"
+							name="start"
+							value={formData.start}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						/>
+					</div>
+
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							End Time
+						</label>
+						<input
+							type="datetime-local"
+							name="end"
+							value={formData.end}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						/>
+					</div>
+
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							Price
+						</label>
+						<input
+							type="number"
+							name="price"
+							value={formData.price}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						/>
+					</div>
+
+					<div className="space-y-2">
+						<label className="block text-lg font-medium text-gray-700">
+							Type
+						</label>
+						<select
+							name="type"
+							value={formData.type}
+							onChange={handleChange}
+							className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
+							required
+						>
+							<option value="one-to-one">One-to-One</option>
+							<option value="group">Group</option>
+						</select>
+					</div>
+
+					<button
+						type="submit"
+						className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
+					>
+						Create Session
+					</button>
+				</form>
 			</div>
-			<div className="form-group">
-				<label className="form-label">Description</label>
-				<textarea
-					name="description"
-					value={formData.description}
-					onChange={handleChange}
-					className="form-input"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="form-label">Date</label>
-				<input
-					type="date"
-					name="date"
-					value={formData.date}
-					onChange={handleChange}
-					className="form-input"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="form-label">Time From</label>
-				<input
-					type="time"
-					name="timeFrom"
-					value={formData.timeFrom}
-					onChange={handleChange}
-					className="form-input"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="form-label">Time To</label>
-				<input
-					type="time"
-					name="timeTo"
-					value={formData.timeTo}
-					onChange={handleChange}
-					className="form-input"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="form-label">Price</label>
-				<input
-					type="number"
-					name="price"
-					value={formData.price}
-					onChange={handleChange}
-					className="form-input"
-				/>
-			</div>
-			<div className="form-group">
-				<label className="form-label">Type</label>
-				<select
-					name="type"
-					value={formData.type}
-					onChange={handleChange}
-					className="form-input"
-				>
-					<option value="one-to-one">One-to-One</option>
-					<option value="group">Group</option>
-				</select>
-			</div>
-			<button type="submit" className="form-button">
-				Create Session
-			</button>
-		</form>
+		</div>
 	);
 };
 

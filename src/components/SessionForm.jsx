@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 const SessionForm = () => {
     const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const SessionForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission logic here
-        // console.log('Form submitted:', formData);
+        console.log('Form submitted:', formData);
     };
 
     return (

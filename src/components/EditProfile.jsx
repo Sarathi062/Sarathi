@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
-	// const navigate = useNavigate();
+	const navigate = useNavigate();
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -96,7 +96,7 @@ const EditProfile = () => {
 				const resData = await res.json();
 				setFormData(resData.profile);
 			} catch (error) {
-				setError("Error fetching profile", error);
+				setError("Error fetching profile");
 			}
 		};
 
