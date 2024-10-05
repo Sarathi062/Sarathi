@@ -24,12 +24,15 @@ const MentorDashboard = () => {
         return;
       }
 
-      const res = await fetch("https://sarathi-backend-cgm8.onrender.com/profile-mentor", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        "https://sarathi-backend-cgm8.onrender.com/profile-mentor",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const data = await res.json();
       if (!res.ok) {
@@ -129,7 +132,7 @@ const MentorDashboard = () => {
     try {
       const token = getToken();
       if (!token) throw new Error("Unauthorized access");
-      
+
       // Prepare the event details using session information
       const eventDetails = {
         title: session.title, // Use the current session's title
@@ -143,15 +146,18 @@ const MentorDashboard = () => {
           timeZone: "Asia/Kolkata", // Adjust based on your timezone
         },
       };
-      const res = await fetch("https://sarathi-backend-cgm8.onrender.com/add-event", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(eventDetails),
-      });
-      
+      const res = await fetch(
+        "https://sarathi-backend-cgm8.onrender.com/add-event",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(eventDetails),
+        }
+      );
+
       console.log(res.hangoutLink);
       if (!res.ok) {
         throw new Error("Error adding event to calendar");
@@ -172,77 +178,84 @@ const MentorDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 p-8">
-      {/* Running Note */}
-      <div className="w-full bg-blue-100 text-blue-900 p-4 rounded-md shadow-lg text-center font-semibold">
-        All sessions automatically generate a Google Meet link, which is sent to
-        mentees. You have full access, and everything is ready for you to join
-        the meet!
-      </div>
-      <div className="w-full flex bg-white rounded-xl shadow-lg p-8 space-x-6 h-[90vh]">
-        <div className="w-1/2 h-full pr-4">
-          {error && <p className="text-red-500 text-center">{error}</p>}
-          <h1 className="text-3xl font-bold text-center mb-6">
-            Mentor Dashboard
-          </h1>
-          <div className="flex justify-center space-x-4 mb-6">
-            <button
-              className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition"
-              onClick={() => navigate("/create-session")}
-            >
-              Create Session
-            </button>
-            <button
-              className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition"
-              onClick={addEventsForFilteredSessions}
-            >
-              Add Event to Calendar
-            </button>
+    <>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="min-h-screen flex flex-col bg-gray-50 p-8">
+          <div className="w-full bg-blue-100 text-blue-900 p-4 rounded-md shadow-lg text-center font-semibold">
+            All sessions automatically generate a Google Meet link, which is
+            sent to mentees. You have full access, and everything is ready for
+            you to join the meet!
           </div>
-          {calendarId ? (
-            <iframe
-              src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=Asia%2FKolkata`}
-              style={{ border: 0 }}
-              width="100%"
-              height="80%"
-              frameBorder="0"
-              scrolling="no"
-              title="User's Google Calendar"
-              className="rounded-lg shadow-md"
-            ></iframe>
-          ) : (
-            <p className="text-gray-600">Loading calendar...</p>
-          )}
-        </div>
-        <div className="w-1/2 h-full flex flex-col">
-          {createdSessions && (
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={handleSearch}
-              placeholder="Search sessions..."
-              className="w-full p-2 border border-gray-300 rounded-md mb-4"
-            />
-          )}
-          {loading ? (
-            <LoadingSpinner />
-          ) : (
-            <div className="flex flex-col space-y-6 h-full overflow-auto">
-              <h2 className="text-xl font-semibold mb-4">Created Sessions</h2>
-              <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
-                {filteredSessions.length > 0 ? (
-                  filteredSessions.map((session) => (
-                    <SessionCard key={session._id} session={session} />
-                  ))
-                ) : (
-                  <p>No created sessions found</p>
-                )}
+          <div className="w-full flex bg-white rounded-xl shadow-lg p-8 space-x-6 h-[90vh]">
+            <div className="w-1/2 h-full pr-4">
+              {error && <p className="text-red-500 text-center">{error}</p>}
+              <h1 className="text-3xl font-bold text-center mb-6">
+                Mentor Dashboard
+              </h1>
+              <div className="flex justify-center space-x-4 mb-6">
+                <button
+                  className="bg-green-600 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition"
+                  onClick={() => navigate("/create-session")}
+                >
+                  Create Session
+                </button>
+                <button
+                  className="bg-red-600 text-white py-2 px-6 rounded-lg hover:bg-red-700 transition"
+                  onClick={addEventsForFilteredSessions}
+                >
+                  Add Event to Calendar
+                </button>
               </div>
+              {calendarId ? (
+                <iframe
+                  src={`https://calendar.google.com/calendar/embed?src=${calendarId}&ctz=Asia%2FKolkata`}
+                  style={{ border: 0 }}
+                  width="100%"
+                  height="80%"
+                  frameBorder="0"
+                  scrolling="no"
+                  title="User's Google Calendar"
+                  className="rounded-lg shadow-md"
+                ></iframe>
+              ) : (
+                <p className="text-gray-600">Loading calendar...</p>
+              )}
             </div>
-          )}
+            <div className="w-1/2 h-full flex flex-col">
+              {createdSessions && (
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  placeholder="Search sessions..."
+                  className="w-full p-2 border border-gray-300 rounded-md mb-4"
+                />
+              )}
+              {loading ? (
+                <LoadingSpinner />
+              ) : (
+                <div className="flex flex-col space-y-6 h-full overflow-auto">
+                  <h2 className="text-xl font-semibold mb-4">
+                    Created Sessions
+                  </h2>
+                  <div className="bg-gray-100 p-4 rounded-lg shadow-inner">
+                    {filteredSessions.length > 0 ? (
+                      filteredSessions.map((session) => (
+                        <SessionCard key={session._id} session={session} />
+                      ))
+                    ) : (
+                      <p>No created sessions found</p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

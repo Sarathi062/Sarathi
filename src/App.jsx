@@ -21,10 +21,12 @@ import SessionForm from "./components/SessionForm";
 import CreateSession from "./components/CreateSession";
 import EditProfile from "./components/EditProfile";
 import Aimentor from "./components/Aimentor";
+
 function App() {
   const [mentorLogin, setMentorLogin] = useState(false);
   const [menteeLogin, setMenteeLogin] = useState(false);
   const [logedIn, setLogedIn] = useState(false);
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
       setLogedIn(true);
@@ -36,44 +38,48 @@ function App() {
       }
     }
   }, []);
+
   return (
     <Router>
-      <Navbar
-        logedIn={logedIn}
-        mentorLogin={mentorLogin}
-        menteeLogin={menteeLogin}
-        setMentorLogin={setMentorLogin}
-        setMenteeLogin={setMenteeLogin}
-        setLogedIn={setLogedIn}
-      />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              mentorLogin={mentorLogin}
-              menteeLogin={menteeLogin}
-              logedIn={logedIn}
+      <div className="flex flex-col min-h-screen">
+        <Navbar
+          logedIn={logedIn}
+          mentorLogin={mentorLogin}
+          menteeLogin={menteeLogin}
+          setMentorLogin={setMentorLogin}
+          setMenteeLogin={setMenteeLogin}
+          setLogedIn={setLogedIn}
+        />
+        <div className="flex-grow">
+          <Routes>
+            {/* All your routes */}
+            <Route
+              path="/"
+              element={
+                <Home
+                  mentorLogin={mentorLogin}
+                  menteeLogin={menteeLogin}
+                  logedIn={logedIn}
+                />
+              }
             />
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            !logedIn ? (
-              <Login
-                setMentorLogin={setMentorLogin}
-                setMenteeLogin={setMenteeLogin}
-                setLogedIn={setLogedIn}
-              />
-            ) : (
-              <Navigate
-                to={menteeLogin ? "/mentee-dashboard" : "/mentor-dashboard"}
-              />
-            )
-          }
-        />
-        <Route
+            <Route
+              path="/login"
+              element={
+                !logedIn ? (
+                  <Login
+                    setMentorLogin={setMentorLogin}
+                    setMenteeLogin={setMenteeLogin}
+                    setLogedIn={setLogedIn}
+                  />
+                ) : (
+                  <Navigate
+                    to={menteeLogin ? "/mentee-dashboard" : "/mentor-dashboard"}
+                  />
+                )
+              }
+            />
+            <Route
           path="/signup"
           element={
             !logedIn ? (
@@ -164,8 +170,10 @@ function App() {
           element={menteeLogin ? <Aimentor /> : <Navigate to="/login" />}
         />
         <Route path="/ai-mentor" element={<Aimentor />} />
-      </Routes>
-      <Footer />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </Router>
   );
 }

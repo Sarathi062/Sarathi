@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MentorCard from "./MentorCard"; // Assuming MentorCard is the component to display each mentor
+import LoadingSpinner from "./LoadingSpinner";
 
 const MentorCardPage = () => {
   const [showButton, setShowButton] = useState(false);
@@ -11,7 +12,9 @@ const MentorCardPage = () => {
   // Fetch mentors from the server
   const fetchMentors = async () => {
     try {
-      const response = await fetch("https://sarathi-backend-cgm8.onrender.com/get-mentor-profiles");
+      const response = await fetch(
+        "https://sarathi-backend-cgm8.onrender.com/get-mentor-profiles"
+      );
       const data = await response.json();
       return data.mentors;
     } catch (error) {
@@ -102,8 +105,8 @@ const MentorCardPage = () => {
               <MentorCard key={mentor._id} mentor={mentor} />
             ))
           ) : (
-            <p className="text-center text-gray-500 w-full">
-              No mentors found.
+            <p className="flex justify-center items-center w-screen w-full text-gray-500">
+              <LoadingSpinner />
             </p>
           )}
         </div>
