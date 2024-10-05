@@ -46,7 +46,7 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="/"
+                    href="https://www.freeprivacypolicy.com/live/5204139f-0224-4c1c-aa86-5c55dffa3941"
                     className="hover:text-blue-300 transition-colors duration-300"
                   >
                     Privacy Policy
