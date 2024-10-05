@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-
+import LoadingSpinner from './LoadingSpinner.jsx'
 const Login = (props) => {
   const navigate = useNavigate();
+  const[loading,setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -26,6 +27,7 @@ const Login = (props) => {
     const endpoint = role === "mentor" ? "login-Mentor" : "login-Mentee";
 
     try {
+      setLoading(true);
       const res = await fetch(`https://sarathi-backend-cgm8.onrender.com/${endpoint}`, {
         method: "POST",
         headers: {
@@ -45,7 +47,7 @@ const Login = (props) => {
       localStorage.setItem("token", data.token);
       
       setError("Login Successful");
-
+      setLoading(false);
       if (role === "mentee") {
         props.setLogedIn(true);
         props.setMenteeLogin(true);
@@ -96,7 +98,7 @@ const Login = (props) => {
             or
           </span>
         </div>
-
+        {loading && (<LoadingSpinner/>)}
         {/* Display Error */}
         {error && (
           <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
