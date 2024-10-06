@@ -3,6 +3,7 @@ import { FaLinkedin, FaTwitter, FaFacebook } from "react-icons/fa";
 import yash from "../assets/yash.jpeg";
 import yashraj from "../assets/yashraj.jpeg";
 import Janhavi from "../assets/janhavi.jpeg";
+import mission from "../assets/mission.png"
 
 const teamMembers = [
   {
@@ -92,7 +93,7 @@ const AboutPage = () => {
           <div className="flex items-center justify-center">
             {/* You can replace this with any related image */}
             <img
-              src="https://via.placeholder.com/400"
+              src={mission}
               alt="Mission Image"
               className="rounded-xl shadow-lg"
             />
