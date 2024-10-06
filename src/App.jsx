@@ -21,6 +21,7 @@ import SessionForm from "./components/SessionForm";
 import CreateSession from "./components/CreateSession";
 import EditProfile from "./components/EditProfile";
 import Aimentor from "./components/Aimentor";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 function App() {
   const [mentorLogin, setMentorLogin] = useState(false);
@@ -170,6 +171,7 @@ function App() {
           element={menteeLogin ? <Aimentor /> : <Navigate to="/login" />}
         />
         <Route path="/ai-mentor" element={<Aimentor />} />
+        <Route path="/privacypolicy" element={<PrivacyPolicy/>}/>
           </Routes>
         </div>
         <Footer />
